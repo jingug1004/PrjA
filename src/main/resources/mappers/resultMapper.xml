@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.resultMapper">
+
+	<!-- 테스트 수행이력 목록 구하기 -->
+	<select id="list" resultType="ResultVO">
+		select senid, resid, devid,
+		resname, devname as dev_name, "appid",
+		appname as app_name, starttime,
+		endtime, "interval",
+		case
+		when result =
+		'0' then 'Pass' when result =
+		'1'
+		then 'Fail'
+		when result
+		= '2' then
+		'N/A'
+		when result = '3' then
+		'N/I' end as result,
+		reason,
+		case
+		when
+		seriousness =
+		'0' then
+		'Critical' when
+		seriousness = '1'
+		then 'Major'
+		when seriousness
+		=
+		'2' then
+		'Minor' end as seriousness
+		, procedure,
+		case
+		when status =
+		'0'
+		then 'New' when
+		status =
+		'1' then
+		'Open'
+		when status =
+		'2' then 'Assigned'
+		when status =
+		'3' then
+		'Resolved'
+		when
+		status = '4'
+		then 'Closed' when
+		status = '5'
+		then
+		'Reopened' end as status,
+		attach, systemlog,
+		eventlog,
+		etclog,
+		adddate,
+		addtime, adduser, repeat,
+		projid
+		from
+		result
+		where projid =
+		#{projid} and
+		senid =
+		#{senid}
+		<include refid="search"></include>
+		<include refid="sort"></include>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+
+	<select id="nameSelect" resultType="ResultVO">
+		select
+		project.projid,project.abbr
+		as proj_abbr,project."name" as proj_name ,
+		phase.phid,phase.abbr as
+		ph_abbr,phase."name" as ph_name,
+		scenario.senid,scenario.senaabbr as
+		s_abbr, scenario.senaname as
+		s_name
+		from scenario
+		left join project on
+		project.projid =
+		scenario.projid
+		left
+		join phase on scenario.projid =
+		phase.projid
+		where
+		scenario.projid =
+		#{projid} and
+		phase.phid =#{phid}
+		and
+		scenario.senid = #{senid}
+	</select>
+
+	<!-- 테스트 수행이력 상세보기 -->
+	<select id="read" resultType="ResultVO">
+		select projid, senid, resid,
+		resname, devid, devname as dev_name, appid, appname as app_name,
+		repeat,starttime,endtime,interval,result,reason,seriousness,procedure,status,
+		attach,systemlog,eventlog,etclog,adddate,addtime,adduser
+		from result
+		where projid = #{projid} and senid =
+		#{senid} and resid =
+		#{resid}
+	</select>
+
+
+	<!-- 테스트 결과 생성 -->
+	<insert id="create">
+		INSERT INTO result(
+		senid, resid, devid, resname,
+		devname, appid,
+		appname,
+		starttime,
+		<if test="endtime != ''">endtime,</if>
+		"interval", result, reason,
+		seriousness, procedure, status, attach,
+		systemlog,
+		eventlog, etclog,
+		adduser, repeat, projid)
+		VALUES (#{senid},
+		(select
+		case when
+		count(resid)=0
+		then 0 else
+		(select resid from result
+		where
+		projid=#{projid}
+		and senid = #{senid} order by
+		resid desc limit 1)
+		end from
+		result where
+		projid=#{projid} and senid=#{senid})+1, #{devid},
+		#{resname},
+		#{dev_name}, #{appid}, #{app_name}, (NULLIF(#{starttime},'0000-00-00 00:00:00')::timestamp),
+		<if test="endtime != ''"> (NULLIF(#{endtime},'0000-00-00 00:00:00')::timestamp),</if>
+		#{interval}, #{result}, #{reason}, #{seriousness},
+		#{procedure},
+		#{status}, #{attach}, #{systemlog},
+		#{eventlog}, #{etclog}, #{adduser},
+		#{repeat}, #{projid});
+	</insert>
+
+	<!-- test result 수정 -->
+	<update id="modify"> update result set resname=#{resname},
+		result=#{result}, seriousness=#{seriousness},procedure=#{procedure},
+		devid=#{devid},attach=#{attach},status=#{status}, reason =#{reason}
+		where projid = #{projid} and senid =
+		#{senid} and resid =
+		#{resid}
+	</update>
+
+	<!-- 목록 갯수 구하기 -->
+	<select id="count" resultType="int">
+		select count(resid)
+		from
+		result
+		where
+		projid = #{projid} and senid =
+		#{senid}
+		<include refid="search"></include>
+	</select>
+
+	<!-- Filename구하기 -->
+	<select id="getFilename" resultType="String">
+		select filename
+		from event
+		where
+		projid = #{projid} and senid =
+		#{senid}
+		limit 1
+	</select>
+
+	<!-- 해당 결과 구하기 -->
+	<select id="getResult" resultType="ResultVO">
+		select *
+		from result
+		where
+		projid = #{projid} and senid =
+		#{senid}
+	</select>
+
+	<!-- 테스트 결과 지우기 -->
+	<delete id="remove"> delete from result where projid = #{projid} and
+		senid = #{senid} and resid =#{resid}
+	</delete>
+
+	<!-- 해당 테스트 결과의 파일 구하기 -->
+	<select id="getAttach" resultType="String">
+		select attach from result
+		where
+		projid = #{projid} and senid = #{senid} and resid =#{resid}
+	</select>
+
+	<!-- 최근 생성한 테스트 결과의 아이디 구하기 -->
+	<select id="getResid" resultType="int">
+		select resid from result
+		where
+		projid = #{projid} and senid = #{senid}
+		order by resid desc limit 1
+	</select>
+	
+	
+	<!-- 리플레이 결과 만들기 -->
+	<insert id="replay_create">
+		INSERT INTO replay(
+		projid, senid, resid, repeatnum, seq, result)
+		VALUES (#{projid}, #{senid}, #{resid}, #{repeatnum}, #{seq}, #{result});
+	</insert>
+	
+	<!-- 리플레이 결과 지우기 -->
+	<delete id="replay_remove">
+		delete from replay where projid = #{projid}
+		<if test="senid !=null">
+			and senid = #{senid}
+			<if test="resid !=null">
+				and resid =#{resid}
+			</if>
+		</if>
+	</delete>
+	
+	<!-- 해당 테스트 결과의 리플레이 값 구하기 -->
+	<select id="getReplay" resultType="String">
+		select result from replay
+		where
+		projid = #{projid} and senid = #{senid} and resid =#{resid}
+		and repeatnum = #{repeatnum}
+	</select>
+	
+	<!-- 해당 테스트 결과의 반복횟수 값 구하기 -->
+	<select id="getRepeatNum" resultType="int">
+		select count(repeatnum) from replay
+		where projid = #{projid} and senid = #{senid} and resid =#{resid}
+	</select>
+	
+	<!-- 테스트 모니터링 결과 생성 -->
+	<insert id="resource_create">
+		INSERT INTO resource(
+		senid, resid, monitorno, projid, action,
+		cpu, memory, battery, network, param, cpu_max, cpu_min, battery_max,
+		battery_min, network_max, network_min, memory_max, memory_min)
+		VALUES
+		(#{senid},#{resid},#{resid}, #{projid}, #{action}, #{cpu}, #{memory}, #{battery},
+		#{network}, #{param}, #{cpu_max}, #{cpu_min}, #{battery_max},
+		#{battery_min}, #{network_max}, #{network_min}, #{memory_max},
+		#{memory_min});
+	</insert>
+	
+	<!-- 모니터링 결과 지우기 -->
+	<delete id="resource_remove">
+		delete from resource where projid = #{projid}
+		<if test="senid !=null">
+			and senid = #{senid}
+			<if test="resid !=null">
+				and resid =#{resid}
+			</if>
+		</if>
+	</delete>
+	
+	<!-- 해당 테스트 결과의 모니터링 값 구하기 -->
+	<select id="getResource" resultType="ResourceVO">
+		select * from resource
+		where
+		projid = #{projid} and senid = #{senid} and resid =#{resid}
+		order by
+		monitorno
+	</select>
+
+
+	<!-- 검색 -->
+	<sql id="search">
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and devname like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="fromdate != null">
+			<if test="todate !=null">
+				and adddate between #{fromdate} and #{todate}
+			</if>
+		</if>
+		<if test="result != null">
+			<if test="result != 2">
+				and result = #{result}
+			</if>
+		</if>
+
+	</sql>
+
+	<!-- 정렬 -->
+	<sql id="sort">
+		<choose>
+			<when test="sort != null">
+				order by
+				<choose>
+					<when test="sort == 'date'">
+						result.adddate desc
+					</when>
+					<when test="sort == 'dev'">
+						result.devname
+					</when>
+					<otherwise>
+						"result"."appname"
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				order by result.adddate desc
+			</otherwise>
+		</choose>
+	</sql>
+
+
+</mapper>

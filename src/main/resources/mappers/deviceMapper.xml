@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.deviceMapper">
+
+	<select id="deviceList" resultType="DeviceVO">
+		SELECT
+		devid,
+		name,
+		ramsize,
+		os,
+		version,
+		company,
+		networkstandard,
+		ipaddr,
+		port,
+		modelno,
+		adddate,
+		adduser,
+		serial,
+		width,
+		height,
+		case when status = '0'
+		then '유선' when
+		status = '1' then '무선' else '확인 불가' end as status
+		FROM "device"
+		WHERE adduser = #{user}
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and name like CONCAT('%', #{keyword}, '%')
+		</if>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+
+	<insert id="insertDevice">
+		INSERT INTO "device"
+		(devid, serial, ramsize, os, version, company, networkstandard, modelno, adddate, adduser)
+		VALUES
+		(#{devid}, #{serial}, #{ramsize}, #{os}, #{version}, #{company}, #{networkstandard}, #{modelno}, NOW(), #{adduser})
+	</insert>
+
+	<select id="devicecontrolList" resultType="DeviceVO">
+		SELECT
+		devid,
+		name,
+		ramsize,
+		os,
+		version,
+		company,
+		networkstandard,
+		ipaddr,
+		port,
+		modelno,
+		adddate,
+		adduser,
+		serial,
+		width,
+		height,
+		case when status = '0'
+		then '유선' when
+		status = '1' then '무선' else '확인 불가' end as status
+		FROM "device"
+		WHERE adduser = #{adduser}
+	</select>
+
+
+	<select id="countDevice" resultType="int">
+		SELECT COUNT(*) FROM "device" where adduser = #{adduser}
+	</select>
+	<select id="ktDevice" resultType="int">
+		SELECT COUNT(*) FROM "device" WHERE company = 'KT' and adduser = #{adduser}
+	</select>
+	<select id="sktDevice" resultType="int">
+		SELECT COUNT(*) FROM "device" WHERE company = 'SKT' and adduser = #{adduser}
+	</select>
+	<select id="lgDevice" resultType="int">
+		SELECT COUNT(*) FROM "device" WHERE company = 'LGT' and adduser = #{adduser}
+	</select>
+	<select id="etcDevice" resultType="int">
+		SELECT COUNT(*) FROM "device" WHERE company = 'Unknown' and adduser = #{adduser}
+	</select>
+	
+	<!-- device 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(name)
+		from
+		"device"
+		where adduser = #{user}
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and name like CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+
+	<delete id="deleteDevice">
+		DELETE FROM "device"
+		WHERE devid = #{devid}
+	</delete>
+</mapper>

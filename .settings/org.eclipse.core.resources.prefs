@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java/kr/co/comes/projectA/controller/CaseController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/MainController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/PhaseController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/ProjectController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/ResultController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/ScenarioController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/controller/UploadController.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/dto/ListCriteria.java=UTF-8
+encoding//src/main/java/kr/co/comes/projectA/dto/PageMaker.java=UTF-8
+encoding//src/main/webapp/WEB-INF/views/project/modify.jsp=UTF-8
+encoding//src/main/webapp/include/upload.jsp=UTF-8

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.mainMapper">
+
+	<!-- 전체 프로젝트 목록갯수 구하기 -->
+	<select id="p_Total" resultType="int">
+		select count(projid)
+		from
+		project
+		<include refid="role"></include>
+	</select>
+
+	<!-- 진행중인 프로젝트 수 구하기 -->
+	<select id="p_Ongoing" resultType="int">
+		select count(projid)
+		from project
+		<include refid="role"></include>
+		and status='0'
+	</select>
+
+	<!-- 진행하고 있지 않은 프로젝트 수 구하기 -->
+	<select id="p_Hold" resultType="int">
+		select count(projid)
+		from project
+		<include refid="role"></include>
+		and status='1'
+	</select>
+
+	<!-- 끝난 프로젝트 수 구하기 -->
+	<select id="p_End" resultType="int">
+		select count(projid)
+		from project
+		<include refid="role"></include>
+		and status='2'
+	</select>
+
+	<!-- 전체 사용자수 구하기 -->
+	<select id="u_Total" resultType="int">
+		select count(id)
+		from
+		"user"
+	</select>
+
+	<!-- 관리자 수 구하기 -->
+	<select id="u_Admin" resultType="int">
+		select count(id)
+		from
+		"user"
+		where
+		role = '0'
+	</select>
+
+	<!-- Test Enginner 수 구하기 -->
+	<select id="u_TestEnginner" resultType="int">
+		select count(id)
+		from
+		"user"
+		where role = '1'
+	</select>
+
+	<!-- Reviewer 수 구하기 -->
+	<select id="u_Reviewer" resultType="int">
+		select count(id)
+		from
+		"user"
+		where role = '2'
+	</select>
+
+	<!-- note 갯수 -->
+	<select id="Note" resultType="int">
+		select count(seq)
+		from
+		issue
+		where
+		category='0'
+		and projid = #{projid}
+	</select>
+
+	<!--issue 갯수 -->
+	<select id="Issue" resultType="int">
+		select count(seq)
+		from issue
+		where
+		category='1'
+		and projid = #{projid}
+	</select>
+
+	<!-- defect 갯수 -->
+	<select id="Defect" resultType="int">
+		select count(seq)
+		from issue
+		where
+		category='2'
+		and projid = #{projid}
+	</select>
+
+
+	<!-- 권한 별 목록 갯수 -->
+	<sql id="role">
+		<choose>
+			<when test="user_role == '1'"> <!-- * 일반사용자 -->
+				where project.projid in (select projid from useproj where
+				userid=#{user})
+			</when>
+			<otherwise>
+				where projid > 0
+			</otherwise>
+		</choose>
+	</sql>
+
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles 
+	HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+	<!-- File Upload 를 위한 세팅 -->
+	<!-- commons-fileupload, io 를 maven 세팅 필요 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대 업로드 수치(bytes) : 50mb 제한 -->
+		<beans:property name="maxUploadSize" value="52428800" />
+		<!-- 업로드 파일 인코딩 -->
+		<beans:property name="defaultEncoding" value="UTF-8" />
+	</beans:bean>
+
+	<default-servlet-handler />
+
+	<context:component-scan base-package="kr.co.comes.projectA" />
+
+	<beans:bean id="authInterceptor"
+		class="kr.co.comes.projectA.interceptor.AuthInterceptor"></beans:bean>
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/project/**/*" />
+			<mapping path="/user/**/*" />
+			<mapping path="/license/**/*" />
+			<mapping path="/app/**/*" />
+			<mapping path="/device/**/*" />
+			<mapping path="/downlaod" />
+			<mapping path="/help_support" />
+			<exclude-mapping path="/user/login_check" />
+			<exclude-mapping path="/app/getapp" />
+			<exclude-mapping path="/app/getpackage" />
+			<exclude-mapping path="/device/getdevice" />
+			<exclude-mapping path="/device/replay" />
+			<exclude-mapping path="/device/getwc" />
+			<exclude-mapping path="/device/getchk" />
+			<exclude-mapping path="/project/resource" />
+			<exclude-mapping path="/project/scenario/getscenario" />
+			<exclude-mapping path="/project/scenario/getpath" />
+			<beans:ref bean="authInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+	<beans:bean id="dbInterceptor"
+		class="kr.co.comes.projectA.interceptor.DBdownInterceptor"></beans:bean>
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/**/*" />
+			<exclude-mapping path="/dbdown" />
+			<beans:ref bean="dbInterceptor" />
+		</interceptor>
+	</interceptors>
+
+	<beans:bean id="echoHandler"
+		class="kr.co.comes.projectA.controller.SocketHandler" />
+
+	<websocket:handlers>
+		<websocket:mapping handler="echoHandler" path="/echo-ws" />
+		<websocket:sockjs />
+	</websocket:handlers>
+
+</beans:beans>

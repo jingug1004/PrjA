@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.issueMapper">
+
+	<!-- issue 목록 -->
+	<select id="list" resultType="IssueVO">
+		select
+		(select "name" from project where projid=issue.projid) as
+		proj_name,
+		(select
+		"name" from phase where phid=issue.phid and projid =
+		issue.projid) as
+		ph_name,
+		projid ,phid, isuname,isudesc, seq,
+		case when
+		category =
+		'0' then 'note'
+		when category = '1' then 'issue'
+		when
+		category
+		= '2' then
+		'defect' end as category,
+		case when
+		seriousness =
+		'0' then
+		'Critical'
+		when seriousness = '1' then 'Major'
+		when seriousness
+		= '2'
+		then 'Minor'
+		end as seriousness,
+		case when
+		status = '0' then 'New'
+		when
+		status = '1'
+		then 'Open'
+		when status = '2' then 'Assigned'
+		when
+		status =
+		'3' then
+		'Resolved'
+		when status = '4' then 'Closed'
+		when status
+		= '5' then
+		'Reopened' end as status,
+		adduser, adddate
+		from issue
+		<include refid="search"></include>
+		<include refid="sort"></include>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+
+	<!-- 프로젝트 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(seq)
+		from
+		issue
+		<include refid="search"></include>
+	</select>
+
+	<!-- issue 생성 -->
+	<insert id="create">
+		insert into issue(
+		projid, seq, phid, isudesc,
+		adduser, isuname, category,
+		seriousness, procedure, status, attach
+		)
+		values ( #{projid},
+		(select case
+		when count(seq)=0 then 0 else
+		(select
+		seq from issue
+		where projid=#{projid}
+		order by seq desc limit 1) end
+		from
+		issue
+		where projid=#{projid})+1,
+		#{phid},#{isudesc},#{adduser},#{isuname},#{category},
+		#{seriousness},#{procedure},#{status}
+		,#{attach})
+	</insert>
+
+	<!-- issue seq 구하기 -->
+	<select id="seq" resultType="int">
+		select case when count(seq)=0 then 0
+		else (select
+		seq from issue
+		where projid=#{projid}
+		order by seq desc
+		limit 1)
+		end
+		from issue
+		where projid=#{projid}
+	</select>
+
+	<!-- issue 삭제 -->
+	<delete id="remove">
+		delete from issue
+		where projid = #{projid}
+		and seq =
+		#{seq}
+	</delete>
+
+	<!-- issue 상세 -->
+	<select id="read" resultType="IssueVO">
+		select projid, phid,
+		(select "name"
+		from project where projid=#{projid}) as proj_name,
+		(select "name" from
+		phase where phid=#{phid} and projid = #{projid}) as ph_name,
+		seq,
+		isuname, isudesc, adduser, adddate, upddate,
+		case when
+		category = '0'
+		then 'note'
+		when category = '1' then 'issue'
+		when
+		category = '2' then
+		'defect' end as category,
+		case when
+		seriousness =
+		'0'
+		then 'Critical'
+		when
+		seriousness = '1' then 'Major'
+		when seriousness
+		=
+		'2' then 'Minor'
+		end as
+		seriousness,
+		case when
+		status = '0' then 'New'
+		when status = '1'
+		then
+		'Open'
+		when status = '2' then 'Assigned'
+		when
+		status = '3' then
+		'Resolved'
+		when status = '4' then 'Closed'
+		when status
+		= '5' then
+		'Reopened' end as status,
+		status, attach, procedure
+		from issue
+		where
+		projid =
+		#{projid} and seq = #{seq}
+	</select>
+
+	<!-- issue 파일 구하기 -->
+	<select id="getAttach" resultType="String">
+		select attach from issue where
+		projid = #{projid} and seq = #{seq}
+	</select>
+
+	<!-- issue 수정 -->
+	<update id="modify">
+		update issue
+		set
+		isudesc=#{isudesc}, upduser=#{upduser},
+		isuname=#{isuname},
+		category=#{category}, seriousness=#{seriousness},
+		procedure=#{procedure},
+		status=#{status}
+		<if test="attach != null">, attach=#{attach}</if>
+		where projid = #{projid} and seq = #{seq}
+	</update>
+
+	<!-- issue 파일 삭제 -->
+	<update id="deleteAttach">
+		update issue
+		set attach = null
+		where projid = #{projid}
+		and seq = #{seq}
+	</update>
+
+	<!-- issue 검색 -->
+	<sql id="search">
+		where projid=#{projid}
+		<if test="ph_keyword != null">	<!-- phase 키워드 입력시 -->
+			and (select "name" from phase where phid=issue.phid and projid =
+			issue.projid) like CONCAT('%', #{ph_keyword}, '%')
+		</if>
+		<if test="n_keyword != null">	<!-- note 키워드 입력시 -->
+			and (isuname like CONCAT('%', #{n_keyword}, '%')
+			or isudesc like
+			CONCAT('%', #{n_keyword}, '%'))
+		</if>
+		<if test="category != null">
+			<foreach collection="category" item="item" index="index"
+				separator="or" open="and(" close=")">
+				category = '${category[index]}'
+			</foreach>
+		</if>
+		<if test="seriousness != null">
+			<foreach collection="seriousness" item="item" index="index"
+				separator="or" open="and(" close=")">
+				seriousness =
+				'${seriousness[index]}'
+			</foreach>
+		</if>
+		<if test="status != null">
+			<foreach collection="status" item="item" index="index"
+				separator="or" open="and(" close=")">
+				status = '${status[index]}'
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- issue 정렬 -->
+	<sql id="sort">
+		<if test="sort == 'issue'">
+			order by isuname desc
+		</if>
+		<if test="sort == 'date'">
+			order by adddate desc
+		</if>
+	</sql>
+
+	<!-- 해당 issue 구하기-->
+	<select id="getIssue" resultType="IssueVO">
+		select * from issue where
+		projid = #{projid}
+		<if test="phid != '' || phid != null">
+			and phid = #{phid}
+		</if>
+	</select>
+
+</mapper>

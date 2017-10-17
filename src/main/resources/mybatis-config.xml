@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 매번 parameterType이나 resultType을 패키지까지 포함된 클래스명을 작성하는 일이 번거롭다면 작성해줄수있음. (root-context.xml 설정) -->
+	<typeAliases>
+		<package name="kr.co.comes.projectA.dto"/>
+	</typeAliases>
+</configuration>
+

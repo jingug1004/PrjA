@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.appMapper">
+
+	<select id="appList" resultType="AppVO">
+		SELECT
+		appid,
+		appname,
+		packagename,
+		appversion,
+		adddate,
+		adduser
+		FROM "app"
+		where adduser = #{user}
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and appname like CONCAT('%', #{keyword}, '%')
+		</if>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+
+	<insert id="insertApp">
+		INSERT INTO "app"
+		(appname, packagename, appversion, adddate, adduser)
+		VALUES
+		(#{appname}, #{packagename}, #{appversion}, NOW(), #{adduser})
+	</insert>
+
+	<select id="viewApp" resultType="AppVO">
+		SELECT
+		appid,
+		appname,
+		packagename,
+		appversion,
+		adddate,
+		adduser
+		FROM "app"
+		WHERE packagename = #{packagename}
+	</select>
+
+	<!-- app 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(appname)
+		from
+		"app"
+		where adduser = #{user}
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and appname like CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+
+	<delete id="deleteApp">
+		DELETE FROM "app"
+		WHERE packagename = #{packagename}
+	</delete>
+	
+	<select id="countApp" resultType="int">
+		SELECT COUNT(*) FROM "app"
+		where adduser = #{adduser}
+	</select>	
+</mapper>

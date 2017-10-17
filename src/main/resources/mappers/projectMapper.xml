@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.projectMapper">
+
+	<!-- 프로젝트 목록 -->
+	<select id="list" resultType="ProjectVO">
+		select distinct
+		project.projid,project.name,project.adddate,project.upddate,project.abbr,
+		(select name from project_phase
+		where projid=project.projid
+		and phid !=
+		-1 limit 1) as phase ,
+		(select phid from project_phase
+		where
+		projid=project.projid
+		limit 1) as phid,
+		count(scenario.projid) as case1,
+		(select count(projid)
+		from issue where projid=project.projid
+		) as issue
+		from project
+		left join scenario on scenario.projid = project.projid
+		<include refid="search"></include>
+		group by project.projid
+		<include refid="sort_list"></include>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+
+	<!-- 프로젝트 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(projid)
+		from
+		project
+		<include refid="search"></include>
+	</select>
+
+	<!-- 가장 최근에 생성한 프로젝트 구하기 -->
+	<select id="projid" resultType="int">
+		select projid
+		from project
+		where
+		project."user" = #{user}
+		order by projid desc limit 1
+	</select>
+
+	<!-- 검색 -->
+	<sql id="search">
+		<choose>
+			<when test="user_role == '1'"> <!-- * 일반사용자 -->
+				where project.projid in (select projid from useproj where
+				userid=#{user}) or "user" = #{user}
+				<if test="keyword != null">	<!-- 키워드 입력시 -->
+					and project.name like CONCAT('%', #{keyword}, '%')
+				</if>
+			</when>
+			<otherwise> <!-- * 관리자 -->
+				<if test="keyword != null">	<!-- 키워드 입력시 -->
+					where project.name like CONCAT('%', #{keyword}, '%')
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<!-- 정렬 -->
+	<sql id="sort_list">
+		<choose>
+			<when test="sort != null"> <!-- 카테고리 선택시 -->
+				<if test="sort == '-'.toString()"> <!-- 카테고리 선택 X -->
+					order by project.adddate desc
+				</if>
+				<if test="sort == 'n'.toString()"> <!-- 카테고리 프로젝트명 선택시 -->
+					order by project.name asc
+
+				</if>
+				<if test="sort == 'd'.toString()"> <!-- 카테고리 날짜 선택시 -->
+					order by project.adddate desc
+				</if>
+				<if test="sort == 't'.toString()"> <!-- 카테고리 날짜 선택시 -->
+					order by project.upddate desc
+				</if>
+			</when>
+			<otherwise>
+				order by project.adddate desc
+			</otherwise>
+		</choose>
+	</sql>
+
+
+	<!-- 프로젝트 상세 -->
+	<select id="project_read" resultType="ProjectVO">
+		select *
+		from project
+		where
+		projid = #{projid}
+	</select>
+
+	<!-- 프로젝트 수정 -->
+	<update id="project_modify">
+		update project
+		set name=#{name}, status =#{status}
+		,abbr=#{abbr},"desc"=#{desc},
+		todate = #{todate}, fromdate=
+		#{fromdate},
+		upduser=#{upduser}, attach=#{attach}
+		where
+		projid =
+		#{projid}
+	</update>
+
+	<!-- 프로젝트 삭제 -->
+	<delete id="project_remove">
+		delete from project where projid = #{projid}
+	</delete>
+
+
+	<!-- 프로젝트 생성 -->
+	<insert id="project_create">
+		insert into
+		project(name, status, abbr,"user",upduser
+		,"desc", todate , fromdate,attach)
+		values
+		(#{name},#{status},#{abbr},#{user},#{upduser},#{desc},#{todate},#{fromdate},#{attach})
+	</insert>
+
+	<!-- 해당 프로젝트의 파일 구하기 -->
+	<select id="getAttach" resultType="String">
+		select attach from project
+		where
+		projid = #{projid}
+	</select>
+
+
+	<!-- useproj create -->
+	<insert id="useproj_create">
+		insert into
+		useproj(projid, userid, role, adddate,
+		adduser)
+		values (#{projid}, #{userid}, #{role}, now(), #{adduser});
+	</insert>
+
+	<!-- 책임자 수정 -->
+	<update id="charge_update">
+		UPDATE useproj
+		SET userid=#{userid}
+		WHERE
+		projid=#{projid} and role = '0';
+	</update>
+
+	<!-- useproj delete -->
+	<delete id="useproj_delete">
+		delete from useproj where projid = #{projid}
+		<if test="role != null">
+			and role = #{role};
+		</if>
+
+	</delete>
+
+	<!-- paticipant 구하기 -->
+	<select id="paticipant" resultType="String">
+		select userid from useproj
+		where
+		projid = #{projid} and role = '1'
+	</select>
+	
+	<!-- charge 구하기 -->
+	<select id="charge" resultType="String">
+		select userid from useproj
+		where
+		projid = #{projid} and role = '0'
+	</select>
+</mapper>

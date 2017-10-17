@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.phaseMapper">
+
+	<!-- phase 목록 -->
+	<select id="list" resultType="PhaseVO">
+		SELECT phase.projid,
+		phase.phid,phase.name,phase.adddate,phase.abbr,
+		(select count(projid) from scenario
+		where projid = phase.projid and
+		phid=phase.phid
+		<include refid="role"></include>
+		) as case1 ,
+		(select count(projid) from issue
+		where projid=phase.projid
+		and phid=phase.phid
+		<include refid="role"></include>
+		) as issue
+		from phase
+		<include refid="search"></include>
+		group by phase.projid,phase.phid
+		order by phase.adddate desc
+		offset
+		#{pageStart} limit #{perPageNum}
+	</select>
+
+
+
+	<!-- phase 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(phid)
+		from
+		phase
+		<include refid="search"></include>
+	</select>
+
+	<!-- phase 상세 -->
+	<select id="read" resultType="PhaseVO">
+		select phase.projid, phase.phid,
+		phase.abbr, phase.name, phase."desc", phase."user",
+		phase.status,phase.attach,
+		phase.fromdate, phase.todate, phase.adddate,
+		phase.upddate,
+		phase.upduser, project.name as proj_name
+		from phase
+		inner
+		join project
+		on phase.projid=project.projid
+		where phase.projid =
+		#{projid} and
+		phase.phid = #{phid}
+	</select>
+
+	<!-- phase 수정 -->
+	<update id="modify">
+		update phase
+		set name=#{name}, abbr=#{abbr},
+		"desc"=#{desc},
+		todate = #{todate}, fromdate= #{fromdate},
+		status=#{status}, attach=#{attach},
+		upddate=NOW()
+		where projid =
+		#{projid} and
+		phid =
+		#{phid}
+	</update>
+
+
+	<!-- phase 삭제 -->
+	<delete id="remove">
+		delete from phase where projid = #{projid} and phid =
+		#{phid}
+	</delete>
+
+	<!-- phase 해당 project.name 목록 불러오기 -->
+	<select id="proj_namelist" resultType="PhaseVO">
+		select name as proj_name ,projid
+		from project
+		<choose>
+			<when test="user_role == '1'"> <!-- * 일반사용자 -->
+				where
+				"user" = #{user}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="proj_name" resultType="String">
+		select name as proj_name
+		from
+		project where projid=#{projid}
+	</select>
+
+	<!-- 가장 최근에 생성한 phase 구하기 -->
+	<select id="phid" resultType="int">
+		select phid
+		from phase
+		where "user" =
+		#{user} and projid=#{projid}
+		order by phid desc limit 1
+	</select>
+
+	<!-- phase 생성 -->
+	<insert id="create">
+		insert into
+		phase(phid, projid,abbr, name,
+		"desc","user", status,fromdate, todate, adddate,attach)
+		values (
+		(select case
+		when count(phid)=0 then 0 else
+		(select phid from phase
+		where
+		projid=#{projid} order by phid desc limit 1)
+		end from phase where
+		projid=#{projid}
+		)+1 ,
+		#{projid},#{abbr},#{name},#{desc},#{user},#{status},#{fromdate},#{todate},NOW(),#{attach})
+	</insert>
+
+	<!-- phase 생성 -->
+	<insert id="skip">
+		insert into
+		phase(phid, projid)
+		values (-1, #{projid})
+	</insert>
+
+	<!-- 권한 조건 -->
+	<sql id="role">
+		<choose>
+			<when test="user_role == '1'"> <!-- * 일반사용자 -->
+				and
+				phase."user" = #{user}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<!-- 검색 -->
+	<sql id="search">
+		<choose>
+			<when test="user_role == '1'"> <!-- * 일반사용자 -->
+				where
+				"user" = #{user} and phase.projid=#{projid}
+				<if test="keyword != null">	<!-- 키워드 입력시 -->
+					and phase.name like CONCAT('%', #{keyword}, '%')
+				</if>
+
+			</when>
+			<otherwise> <!-- * 관리자 -->
+				where
+				phase.projid=#{projid}
+				<if test="keyword != null">	<!-- 키워드 입력시 -->
+					and phase.name like CONCAT('%', #{keyword}, '%')
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<!-- 해당 phase 구하기 -->
+	<select id="getPhase" resultType="PhaseVO">
+		select * from phase where
+		projid = #{projid}
+	</select>
+
+	<!-- 해당 phase의 파일 구하기-->
+	<select id="getAttach" resultType="String">
+		select attach from phase
+		where
+		projid = #{projid} and phid = #{phid}
+	</select>
+
+
+</mapper>

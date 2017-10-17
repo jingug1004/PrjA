@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: lib/projecta_decrypt.jar
+Created_by: 1.0.0
+Main-Class: com.comes.projecta.decryptor.Descryptor

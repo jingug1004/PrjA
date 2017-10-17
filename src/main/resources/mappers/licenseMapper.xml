@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.licenseMapper">
+
+	<select id="licenseList" resultType="LicenseVO">
+		SELECT
+		serverid,
+		case
+		when commercial = '0' then '상용'
+		else '체험판' end as commercial,
+		enddate,
+		maxuser,
+		maxdevice,
+		adddate
+		FROM "license"
+	</select>
+
+	<insert id="insertLicense">
+		INSERT INTO "license"
+		(serverid, commercial, enddate, maxuser, maxdevice, adddate, adduser)
+		VALUES
+		(0, #{commercial}, (current_date + 365), #{maxuser}, #{maxdevice}, current_date, #{adduser})
+	</insert>
+
+	<select id="viewLicense" resultType="LicenseVO">
+		SELECT
+		serverid,
+		case
+		when commercial = '0' then '상용'
+		else '체험판' end as commercial,
+		enddate,
+		maxuser,
+		maxdevice,
+		adddate
+		FROM "license"
+		<!-- WHERE serverid = #{serverid} -->
+	</select>
+
+	<update id="updateLicense">
+		UPDATE "license"
+		SET
+		commercial = #{commercial},
+		enddate = #{enddate},
+		maxuser = #{maxuser},
+		maxdevice = #{maxdevice},
+		adddate = #{adddate},
+		upddate = NOW()
+		WHERE
+		serverid = #{serverid}
+	</update>
+
+	<delete id="deleteLicense">
+		DELETE FROM "license"
+		WHERE serverid = #{serverid}
+	</delete>
+</mapper>

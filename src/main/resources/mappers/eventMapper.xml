@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.eventMapper">
+
+
+	<!-- event 상세 -->
+	<select id="read" resultType="EventVO">
+		select * from event
+		where projid =
+		#{projid}
+		and
+		senid = #{senid} order by seq
+	</select>
+
+	<!-- event 생성 -->
+	<insert id="create">
+		insert into event(projid, senid, seq, evtdesc,
+		evtact,
+		objid,
+		location_x1,location_x2,location_x3,location_y1,location_y2,location_y3,xy,
+		image, adduser,param,filename)
+		values ( #{projid},#{senid},
+		(select case
+		when
+		count(seq)=0
+		then 0 else
+		(select seq from event where
+		projid=#{projid}
+		and senid = #{senid} order by
+		seq desc limit 1)
+		end from
+		event where
+		projid=#{projid} and senid=#{senid})+1,
+		#{evtdesc},#{evtact},#{objid},#{location_x1},#{location_x2},
+		#{location_x3},#{location_y1},#{location_y2},#{location_y3},#{xy},#{image},#{adduser},#{param},#{filename})
+	</insert>
+
+	<!-- event seq갑 구하기 -->
+	<select id="seq" resultType="int">
+		select case when count(seq)=0
+		then 0
+		else
+		(select seq from event where projid=#{projid} order by
+		seq desc
+		limit 1)
+		end from event where
+		projid=#{projid} and senid = #{senid}
+	</select>
+
+	<!-- event 수정 -->
+	<update id="update">
+		UPDATE event
+		SET
+		<if test="evtdesc!=null">
+			evtdesc= #{evtdesc}
+			<if test="image!=null">,</if>
+		</if>
+		<if test="image!=null">
+			image= #{image}
+		</if>
+		WHERE projid = #{projid} and senid= #{senid} and seq=
+		#{seq};
+	</update>
+
+	<!-- event 삭제 -->
+	<delete id="remove">
+		delete from event where projid = #{projid} and
+		senid =
+		#{senid}
+	</delete>
+
+	<!-- event 파일 구하기 -->
+	<select id="getImage" resultType="String">
+		select image from event where
+		projid = #{projid} and senid = #{senid} and seq= #{seq}
+	</select>
+
+	<!-- event 구하기 -->
+	<select id="getEvent" resultType="EventVO">
+		select * from event where
+		projid = #{projid}
+		<if test="senid != null">
+			and senid = #{senid}
+		</if>
+	</select>
+
+	<!-- 해당 device의 serial 값 구하기 -->
+	<select id="getDevice" resultType="String">
+		select serial from device
+		where devid = #{devid}
+	</select>
+	
+	<!-- 해당 app의 packageName 값 구하기 -->
+	<select id="getApp" resultType="String">
+		select packageName from app
+		where
+		appid = #{appid}
+	</select>
+
+</mapper>

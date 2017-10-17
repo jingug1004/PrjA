@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.reportMapper">
+	
+	<!-- 최상단 프로젝트 정보 -->
+	<select id="reportList" resultType="ReportVO">
+		SELECT
+		projid,
+		name,
+		(select
+		count(phid) from phase where projid = #{projid}) as phcount,
+		(select
+		count(senid) from scenario where projid = #{projid}) as secount,
+		(select
+		count(resid) from result where projid = #{projid}) as trecount,
+		(select
+		count(resid) from result where projid = #{projid} and result = '0') as
+		trepcount,
+		(select count(resid) from result where projid = #{projid} and
+		result = '1') as trefcount,
+		fromdate,
+		todate,
+		user,
+		abbr,
+		'desc'
+		FROM
+		project
+		WHERE projid = #{projid}
+	</select>
+	
+	<!-- phaseList 불러오는 mapper -->
+	<select id="phaseList" resultType="ReportVO">
+		SELECT
+		phid,
+		name,
+		'desc',
+		abbr,
+		fromdate,
+		todate
+		FROM phase
+		WHERE projid = #{projid} and phid = #{phid}
+	</select>
+	
+	<!-- allphaseList 불러오는 mapper -->
+	<select id="allphaseList" resultType="ReportVO">
+		SELECT
+		name,
+		desc,
+		abbr,
+		fromdate,
+		todate
+		FROM phase
+		WHERE projid = #{projid}
+	</select>
+	
+	
+	<!-- 중단 테스트 상세 박스 내용  -->
+	<select id="caseList" resultType="ReportVO">
+		SELECT
+		scenario.senid,
+		scenario.senaname,
+		scenario.senaabbr,
+		scenario.senadesc,
+		case when scenario.category = '0'
+		then '리소스 모니터링' when
+		scenario.category = '1' then '테스트 자동화' else '테스트
+		자동화 and 리소스 모니터링' end
+		as senacategory,
+		(select count(resid) from result
+		where projid = #{projid} and senid = #{senid}) as recount,
+		(select
+		count(resid) from result where projid = #{projid} and result = '0' and
+		senid = #{senid}) as repcount,
+		(select count(resid) from result where
+		projid = #{projid} and result = '1' and senid = #{senid}) as refcount
+		FROM project, scenario
+		WHERE project.projid = #{projid} and
+		scenario.projid = #{projid} and scenario.senid = #{senid}
+	</select>
+	
+	<!-- 중단 테스트 상세 박스 내용(전체보기)  -->
+	<select id="allcaseList" resultType="ReportVO">
+		SELECT
+		scenario.senid,
+		scenario.senaname,
+		scenario.senaabbr,
+		scenario.senadesc,
+		case when scenario.category = '0'
+		then '리소스 모니터링' when
+		scenario.category = '1' then '테스트 자동화' else '테스트
+		자동화 and 리소스 모니터링' end
+		as senacategory,
+		(select count(resid) from result
+		where projid = #{projid}) as recount,
+		(select
+		count(resid) from result where projid = #{projid} and result = '0') as repcount,
+		(select count(resid) from result where
+		projid = #{projid} and result = '1') as refcount
+		FROM project, scenario
+		WHERE project.projid = #{projid} and scenario.phid = #{phid} and
+		scenario.projid = #{projid}
+	</select>
+	
+	<!-- 하단 테스트 내용들 -->
+	<select id="testList" resultType="ReportVO">
+		SELECT
+		result.senid,
+		result.resname,
+		result.devname,
+		result.appname,
+		case when
+		result.result = '0' then 'Pass' when result.result = '1'
+		then 'Fail' when result.result = '2' then 'N/A' else 'N/I' end as
+		result,
+		result.starttime,
+		result.endtime,
+		resource.cpu_min,
+		resource.cpu_max,
+		resource.battery_min,
+		resource.battery_max,
+		resource.memory_min,
+		resource.memory_max,
+		resource.network_min,
+		resource.network_max,
+		result.reason,
+		case when
+		result.seriousness = '0' then 'Critical' when result.seriousness = '1'
+		then 'Major' when result.seriousness = '2' then 'Minor' else '' end as
+		seriousness,
+		result.procedure
+		FROM result, resource
+		WHERE result.projid = #{projid} and result.senid = #{senid} and resource.projid = #{projid} and resource.senid = #{senid}
+	</select>
+	
+	<!-- 하단 테스트 내용들(전체보기) -->
+	<select id="alltestList" resultType="ReportVO">
+		SELECT
+		result.senid,
+		result.resname,
+		result.devname,
+		result.appname,
+		case when
+		result.result = '0' then 'Pass' when result.result = '1'
+		then 'Fail' when result.result = '2' then 'N/A' else 'N/I' end as
+		result,
+		result.starttime,
+		result.endtime,
+		resource.senid as senaid,
+		resource.cpu_min,
+		resource.cpu_max,
+		resource.battery_min,
+		resource.battery_max,
+		resource.memory_min,
+		resource.memory_max,
+		resource.network_min,
+		resource.network_max,
+		result.reason,
+		case when
+		result.seriousness = '0' then 'Critical' when result.seriousness = '1'
+		then 'Major' when result.seriousness = '2' then 'Minor' else '' end as
+		seriousness,
+		result.procedure
+		FROM result, resource
+		WHERE result.projid = #{projid} and resource.projid = #{projid}
+	</select>
+	
+	<!-- 1번 selectbox -->
+	<select id="selectb1" resultType="ReportVO">
+		SELECT
+		projid,
+		name
+		from project
+		ORDER BY projid asc
+	</select>
+	
+	<!-- 2번 selectbox -->
+	<select id="selectb2" resultType="ReportVO">
+		SELECT
+		senid,
+		senaname
+		from scenario
+		WHERE senid = #{senid}
+		ORDER BY senid asc
+	</select>
+	
+</mapper>

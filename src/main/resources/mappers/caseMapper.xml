@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.caseMapper">
+
+	<!-- case 목록 -->
+	<select id="list" resultType="CaseVO">
+		SELECT scenario.senid,scenario.senaname, scenario.senaabbr,
+		case when
+		scenario.category = '0' then 'Automation Test'
+		when scenario.category =
+		'1' then
+		'Resource Monitoring'
+		when scenario.category = '2' then
+		'AutoTest + Monitoring' end as
+		s_category,
+		app.appname as
+		app_name,
+		device.name as dev_name,
+		(select
+		count(resid) from "result" where senid
+		=
+		scenario.senid and
+		projid=scenario.projid
+		) as result, scenario.adddate
+		from scenario
+		left join
+		app on scenario.appid
+		= app.appid
+		left join device
+		on scenario.devid =
+		device.devid
+		<include refid="search"></include>
+		<include refid="sort_list"></include>
+		offset
+		#{pageStart} limit #{perPageNum}
+	</select>
+
+	<!-- case 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(senid)
+		from
+		scenario
+		<include refid="search"></include>
+	</select>
+
+	<!-- 해당 프로젝트,phase 가져오기 -->
+	<select id="proj_ph_name" resultType="CaseVO">
+		select project."name" as proj_name, project.projid, phase."name" as
+		ph_name, phase.phid
+		from project
+		left join phase on phase.projid =
+		project.projid
+		where project.projid=#{projid}
+		<if test="phid != 0">and phase.phid =#{phid}</if>
+	</select>
+
+	<!-- 해당 프로젝트 abbr 검색 -->
+	<select id="proj_abbr" resultType="String">
+		select abbr
+		from project
+		where
+		projid=#{projid}
+	</select>
+
+	<!-- 해당 phase abbr 검색 -->
+	<select id="ph_abbr" resultType="String">
+		select abbr
+		from phase
+		where
+		projid=#{projid} and
+		phid=#{phid}
+	</select>
+
+	<!-- 해당 scenario abbr 검색 -->
+	<select id="senaabbr" resultType="String">
+		select senaabbr
+		from scenario
+		where projid=#{projid} and
+		phid=#{phid} and
+		senid=#{senid}
+	</select>
+
+	<!-- case 상세 -->
+	<select id="read" resultType="CaseVO">
+		select
+		projid,phid,senid,senaname,devid,appid,adddate,upddate,adduser,upduser,senaabbr,senadesc,case
+		when
+		scenario.category = '0' then 'Automation Test'
+		when
+		scenario.category = '1' then
+		'Resource Monitoring'
+		when
+		scenario.category = '2' then 'AutoTest + Monitoring' end as
+		s_category,attach,expect
+		from scenario
+		where projid = #{projid} and
+		senid = #{senid}
+	</select>
+
+	<!-- case 수정 -->
+	<update id="modify"> update scenario set senaname=#{senaname},
+		senaabbr=#{senaabbr}, senadesc=#{senadesc},appid=#{appid},
+		devid=#{devid},upduser=#{upduser},category=#{s_category},
+		attach=#{attach},expect=#{expect}
+		where projid = #{projid} and senid =
+		#{senid}
+	</update>
+
+	<!-- case 삭제 -->
+	<delete id="remove"> delete from scenario where projid = #{projid} and
+		senid = #{senid}
+	</delete>
+
+	<!-- case 생성 -->
+	<insert id="create"> insert into scenario(projid, senid, phid, senaname,
+		devid, appid, adduser, senaabbr, senadesc,category,
+		attach,expect)
+		values ( #{projid}
+		,(select case when count(senid)=0
+		then 0 else
+		(select
+		senid from scenario where projid=#{projid} order by
+		senid desc limit 1)
+		end from scenario where
+		projid=#{projid})+1,#{phid},#{senaname},#{devid},#{appid},#{user},
+		#{senaabbr},#{senadesc},#{s_category},#{attach},#{expect})
+	</insert>
+
+	<!-- 최근생성한 case 구하기 -->
+	<select id="senid" resultType="int">
+		select case when count(senid)=0
+		then 0 else
+		(select senid from scenario where projid=#{projid} order by
+		senid desc limit 1)
+		end from scenario where
+		projid=#{projid}
+	</select>
+
+	<!-- 해당 phase name 목록 불러오기 -->
+	<select id="ph_namelist" resultType="CaseVO">
+		select name as ph_name ,phid
+		from phase
+		where projid = #{projid}
+	</select>
+
+	<!-- 해당 phase name 불러오기 -->
+	<select id="ph_name" resultType="String">
+		select name as ph_name
+		from phase
+		where projid=#{projid} and phid =#{phid}
+	</select>
+
+	<!-- case 파일 구하기 -->
+	<select id="getAttach" resultType="String">
+		select attach from scenario
+		where
+		projid = #{projid} and senid = #{senid}
+	</select>
+
+	<!-- case 구하기 -->
+	<select id="getCase" resultType="CaseVO">
+		select * from scenario where
+		projid = #{projid}
+		<if test="phid != '' || phid != null">
+			and phid = #{phid}
+		</if>
+	</select>
+
+	<!-- 사용자의 기본 device 구하기 -->
+	<select id="getDevid" resultType="int">
+		select "user"."devid" from
+		"user" where id
+		= #{user}
+	</select>
+
+	<!-- 해당 device의 name 구하기 -->
+	<select id="getDevName" resultType="String">
+		select "name" from device
+		where devid = #{devid}
+	</select>
+
+	<!-- 사용자의 기본 app 구하기 -->
+	<select id="getAppid" resultType="int">
+		select "user"."appid" from
+		"user" where id
+		= #{user}
+	</select>
+
+	<!-- 해당 appid의 name 구하기 -->
+	<select id="getAppName" resultType="String">
+		select appname from app
+		where
+		appid = #{appid}
+	</select>
+
+	<select id="getreport" resultType="CaseVO">
+		SELECT senid, senaname,
+		senaabbr,
+		senadesc, adddate from scenario
+		where projid = #{projid}
+	</select>
+
+	<!-- 정렬 -->
+	<sql id="sort_list">
+		<choose>
+			<when test="sort != null"> <!-- 정렬 버튼 클릭시 -->
+				<choose>
+					<when test="sort == 'name'.toString()">
+						order by scenario.senaname
+					</when>
+					<when test="sort == 'abbr'.toString()">
+						order by scenario.senaabbr
+					</when>
+					<when test="sort == 'date'.toString()">
+						order by scenario.adddate desc
+					</when>
+				</choose>
+			</when>
+			<otherwise>
+				order by scenario.adddate desc
+			</otherwise>
+		</choose>
+	</sql>
+
+
+	<!-- 검색 -->
+	<sql id="search">
+		where
+		scenario.projid=#{projid}
+		<if test="phid != null">
+			and scenario.phid = #{phid}
+		</if>
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			and scenario.senaname like CONCAT('%', #{keyword}, '%')
+		</if>
+	</sql>
+</mapper>

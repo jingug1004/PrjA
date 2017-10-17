@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="kr.co.comes.projectA.userMapper">
+
+	<!-- 회원 목록 -->
+	<select id="userList" resultType="UserVO">
+		SELECT
+		id,
+		name,
+		case
+		when role = '0' then '관리자'
+		else '사용자' end as role,
+		clntid,
+		telno,
+		email,
+		adddate,appid,devid
+		FROM "user"
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			where id like CONCAT('%', #{keyword}, '%')
+		</if>
+		offset #{pageStart} limit #{perPageNum}
+	</select>
+	<!-- <select id="userList" resultType="UserVO"> SELECT * FROM "user" </select> -->
+	
+	<select id="list" resultType="UserVO">
+		SELECT
+		*
+		FROM "user"
+	</select>
+
+	<!-- user 목록갯수 구하기 -->
+	<select id="listCount" resultType="int">
+		select count(id)
+		from
+		"user"
+		<if test="keyword != null">	<!-- 키워드 입력시 -->
+			where id like CONCAT('%', #{keyword}, '%')
+		</if>
+	</select>
+
+	<!-- 회원 한줄 목록 -->
+	<select id="userOne" resultType="UserVO">
+		SELECT
+		*
+		FROM "user"
+		WHERE id = #{id}
+	</select>
+
+	<!-- 회원 등록 -->
+	<insert id="insertUser">
+		INSERT INTO "user"
+		(id, pwd, name, role, telno, email,
+		adddate)
+		VALUES
+		(#{id}, #{pwd}, #{name}, #{role}, #{telno}, #{email},
+		NOW())
+	</insert>
+
+	<!-- 회원정보 상세조회 -->
+	<select id="viewUser" resultType="UserVO">
+		SELECT
+		id,
+		pwd,
+		name,
+		role,
+		clntid,
+		telno,
+		email,
+		adddate,appid,devid
+		FROM "user"
+		WHERE id = #{id}
+	</select>
+
+	<!-- 회원정보 수정 -->
+	<update id="updateUser">
+		UPDATE "user"
+		SET
+		pwd = #{pwd},
+		name = #{name},
+		role =
+		#{role},
+		telno = #{telno},
+		email = #{email},
+		upddate = NOW()
+		WHERE
+		id =
+		#{id}
+	</update>
+
+	<!-- 회원정보 삭제 -->
+	<delete id="deleteUser">
+		DELETE FROM "user"
+		WHERE id = #{id}
+	</delete>
+
+</mapper>
