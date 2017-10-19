@@ -13,30 +13,30 @@ public class SocketHandler extends TextWebSocketHandler {
 	private static List<WebSocketSession> connectedUsers = new ArrayList<WebSocketSession>();
 
 	WebSocketSession wssession;
-	
-	// À¥ ¼ÒÄÏ ¿¬°áÀÌ ¿­¸®°í »ç¿ëÀÌ ÁØºñ µÉ ¶§ È£Ãâ
+
+	// ì›¹ ì†Œì¼“ ì—°ê²°ì´ ì—´ë¦¬ê³  ì‚¬ìš©ì´ ì¤€ë¹„ ë  ë•Œ í˜¸ì¶œ
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		super.afterConnectionEstablished(session);
 		connectedUsers.add(session);
-		System.out.println(session.getId() + "´Ô Á¢¼Ó");
+		System.out.println(session.getId() + "ë‹˜ ì ‘ì†");
 		System.out.println(session.getRemoteAddress().getHostName());
-		System.out.println("»ç¿ëÁØºñ Àü À¥¼ÒÄÏ Á¢¼Ó:" + connectedUsers.toString());
+		System.out.println("ì‚¬ìš©ì¤€ë¹„ ì „ ì›¹ì†Œì¼“ ì ‘ì†:" + connectedUsers.toString());
 	}
 
 	/**
-	 * µÎ °¡Áö ÀÌº¥Æ®¸¦ Ã³¸®
+	 * ë‘ ê°€ì§€ ì´ë²¤íŠ¸ë¥¼ ì²˜ë¦¬
 	 *
-	 * 1. Send : Å¬¶óÀÌ¾ğÆ®°¡ ¼­¹ö¿¡°Ô ¸Ş½ÃÁö¸¦ º¸³¿ 2. Emit : ¼­¹ö¿¡ ¿¬°áµÇ¾î ÀÖ´Â Å¬¶óÀÌ¾ğÆ®¿¡°Ô ¸Ş½ÃÁö¸¦ º¸³¿
+	 * 1. Send : í´ë¼ì´ì–¸íŠ¸ê°€ ì„œë²„ì—ê²Œ ë©”ì‹œì§€ë¥¼ ë³´ëƒ„ 2. Emit : ì„œë²„ì— ì—°ê²°ë˜ì–´ ìˆëŠ” í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ë©”ì‹œì§€ë¥¼ ë³´ëƒ„
 	 *
 	 * @param WebSocketSession
-	 *            ¸Ş½ÃÁö¸¦ º¸³½ Å¬¶óÀÌ¾ğÆ®
+	 *            ë©”ì‹œì§€ë¥¼ ë³´ë‚¸ í´ë¼ì´ì–¸íŠ¸
 	 * @param TextMessage
-	 *            ¸Ş½ÃÁöÀÇ ³»¿ë
+	 *            ë©”ì‹œì§€ì˜ ë‚´ìš©
 	 */
 
 	/*
-	 * Payload : »ç¿ëÀÚ°¡ º¸³½ ¸Ş½ÃÁö
+	 * Payload : ì‚¬ìš©ìê°€ ë³´ë‚¸ ë©”ì‹œì§€
 	 */
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -55,38 +55,38 @@ public class SocketHandler extends TextWebSocketHandler {
 	}
 
 	/**
-	 * Å¬¶óÀÌ¾ğÆ®°¡ ¼­¹ö¿Í ¿¬°áÀ» ²÷¾úÀ»¶§ ½ÇÇàµÇ´Â ¸Ş¼Òµå
+	 * í´ë¼ì´ì–¸íŠ¸ê°€ ì„œë²„ì™€ ì—°ê²°ì„ ëŠì—ˆì„ë•Œ ì‹¤í–‰ë˜ëŠ” ë©”ì†Œë“œ
 	 *
 	 * @param WebSocketSession
-	 *            ¿¬°áÀ» ²÷Àº Å¬¶óÀÌ¾ğÆ®
+	 *            ì—°ê²°ì„ ëŠì€ í´ë¼ì´ì–¸íŠ¸
 	 * @param CloseStatus
-	 *            ¿¬°á »óÅÂ(È®ÀÎ ÇÊ¿äÇÔ)
+	 *            ì—°ê²° ìƒíƒœ(í™•ì¸ í•„ìš”í•¨)
 	 */
 
-	// À¥¼ÒÄÏ ¿¬°áÀÌ ´İÇûÀ»¶§
+	// ì›¹ì†Œì¼“ ì—°ê²°ì´ ë‹«í˜”ì„ë•Œ
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
 		for (WebSocketSession webSocketSession : connectedUsers) {
 
-			// ÀÚ½ÅÀÌ º¸³½ ¸Ş½ÃÁö¸¦ ¹ŞÁö ¾Ê´Â´Ù.
+			// ìì‹ ì´ ë³´ë‚¸ ë©”ì‹œì§€ë¥¼ ë°›ì§€ ì•ŠëŠ”ë‹¤.
 
 			if (!session.getId().equals(webSocketSession.getId())) {
 				// webSocketSession.sendMessage(new
 				// TextMessage(session.getRemoteAddress().getHostName() +
-				// "ÅğÀåÇß½À´Ï´Ù."));
+				// "í‡´ì¥í–ˆìŠµë‹ˆë‹¤."));
 			}
 		}
-		System.out.println(session.getId() + "´ÔÀÌ ÅğÀåÇß½À´Ï´Ù.");
+		System.out.println(session.getId() + "ë‹˜ì´ í‡´ì¥í–ˆìŠµë‹ˆë‹¤.");
 		connectedUsers.remove(session);
 
 	}
 
-	// Controller·ÎºÎÅÍ param °ª Àü´Ş ¹ŞÀ» °æ¿ì doMessage ÀÌ¿ëÇÏ¿© À¥¼ÒÄÏ Àü´Ş. 
+	// Controllerë¡œë¶€í„° param ê°’ ì „ë‹¬ ë°›ì„ ê²½ìš° doMessage ì´ìš©í•˜ì—¬ ì›¹ì†Œì¼“ ì „ë‹¬.
 	public void doMessage(String ipaddr, String source) throws Exception {
 		System.out.println("socket.doMessage");
 		System.out.println(source);
-		System.out.println("do¸Ş¼¼Áö:" + connectedUsers.toString());
+		System.out.println("doë©”ì„¸ì§€:" + connectedUsers.toString());
 		System.out.println(ipaddr);
 
 		for (WebSocketSession webSocketSession : connectedUsers) {

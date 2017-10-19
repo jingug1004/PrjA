@@ -1,8 +1,12 @@
 package kr.co.comes.projectA.controller;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
+import kr.co.comes.projectA.dto.IssueVO;
+import kr.co.comes.projectA.dto.ListCriteria;
+import kr.co.comes.projectA.dto.PageMaker;
+import kr.co.comes.projectA.dto.ProjectPath;
+import kr.co.comes.projectA.service.*;
+import kr.co.comes.projectA.util.InputValidator;
+import kr.co.comes.projectA.util.UploadFileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -12,17 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.comes.projectA.dto.IssueVO;
-import kr.co.comes.projectA.dto.ListCriteria;
-import kr.co.comes.projectA.dto.PageMaker;
-import kr.co.comes.projectA.dto.ProjectPath;
-import kr.co.comes.projectA.service.CaseService;
-import kr.co.comes.projectA.service.IssueService;
-import kr.co.comes.projectA.service.MainService;
-import kr.co.comes.projectA.service.PhaseService;
-import kr.co.comes.projectA.service.ProjectService;
-import kr.co.comes.projectA.util.InputValidator;
-import kr.co.comes.projectA.util.UploadFileUtils;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 @RequestMapping("/project/issue/*")
 @Controller
@@ -42,35 +37,35 @@ public class IssueController {
 	private IssueService service;
 
 	/**
-	 * Issue ¸ñ·ÏÈ­¸é
-	 * 
+	 * Issue ëª©ë¡í™”ë©´
+	 *
 	 * @param model
-	 * @return project/issue/list.jsp È£Ãâ
+	 * @return project/issue/list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public void list(ListCriteria lc, Model model, HttpSession session) throws Exception {
 		logger.info(lc.toString());
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		char user_role = role.charAt(0);
 
 		/*
-		 * * projectMapper.xml¿¡ ÀÖ´Â select(id=list)±¸¹® ½ÇÇà ÈÄ ProjectVOÅ¸ÀÔÀ¸·Î ÀúÀåµÈ Á¤º¸
-		 * ¸®½ºÆ®¸¦ list¶õ ÀÌ¸§À¸·Î list.jsp¿¡ Àü´Ş
+		 * * projectMapper.xmlì— ìˆëŠ” select(id=list)êµ¬ë¬¸ ì‹¤í–‰ í›„ ProjectVOíƒ€ì…ìœ¼ë¡œ ì €ì¥ëœ ì •ë³´
+		 * ë¦¬ìŠ¤íŠ¸ë¥¼ listë€ ì´ë¦„ìœ¼ë¡œ list.jspì— ì „ë‹¬
 		 */
 
 		lc.setUser(id);
 		lc.setUser_role(user_role);
 		model.addAttribute("list", service.issue_list(lc));
 		model.addAttribute("lc", lc);
-		// list.jsp¿¡ project summary °ª Àü´Ş.
+		// list.jspì— project summary ê°’ ì „ë‹¬.
 		model.addAttribute("note", m_service.NoteCount(lc));
 		model.addAttribute("issue", m_service.IssueCount(lc));
 		model.addAttribute("defect", m_service.DefectCount(lc));
 
-		// ÆäÀÌÂ¡Ã³¸®
+		// í˜ì´ì§•ì²˜ë¦¬
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(lc);
 		pageMaker.setTotalCount(service.issue_listCount(lc));
@@ -78,10 +73,10 @@ public class IssueController {
 	}
 
 	/**
-	 * Issue »ı¼ºÈ­¸é
-	 * 
+	 * Issue ìƒì„±í™”ë©´
+	 *
 	 * @param model
-	 * @return project/issue/create.jsp È£Ãâ
+	 * @return project/issue/create.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public void createGET(HttpSession session, ListCriteria lc, Model model) throws Exception {
@@ -95,16 +90,16 @@ public class IssueController {
 	}
 
 	/**
-	 * Issue »ı¼º
-	 * 
+	 * Issue ìƒì„±
+	 *
 	 * @param model
-	 * @return project/issue/modify.jsp È£Ãâ
+	 * @return project/issue/modify.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createPOST(HttpSession session, IssueVO vo, Model model, BindingResult result,
-			RedirectAttributes redirectAttributes) throws Exception {
+							 RedirectAttributes redirectAttributes) throws Exception {
 
-		// input data Ã¼Å©
+		// input data ì²´í¬
 		new InputValidator().validate(vo, result, "issue");
 		if (result.hasErrors()) {
 			String resultmsg = "";
@@ -129,11 +124,11 @@ public class IssueController {
 	}
 
 	/*
-	 * Issue ¼öÁ¤ÆäÀÌÁö
-	 * 
+	 * Issue ìˆ˜ì •í˜ì´ì§€
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/modify.jsp È£Ãâ
+	 *
+	 * @return project/issue/modify.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public void modifyGET(HttpSession session, IssueVO vo, Model model) throws Exception {
@@ -142,17 +137,17 @@ public class IssueController {
 	}
 
 	/*
-	 * Issue ¼öÁ¤
-	 * 
+	 * Issue ìˆ˜ì •
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/modify.jsp È£Ãâ
+	 *
+	 * @return project/issue/modify.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modifyPOST(HttpSession session, IssueVO vo, BindingResult result, Model model,
-			RedirectAttributes redirectAttributes) throws Exception {
+							 RedirectAttributes redirectAttributes) throws Exception {
 
-		// input data Ã¼Å©
+		// input data ì²´í¬
 		new InputValidator().validate(vo, result, "issue");
 		if (result.hasErrors()) {
 			String resultmsg = "";
@@ -173,18 +168,18 @@ public class IssueController {
 	}
 
 	/*
-	 * * Issue »èÁ¦
-	 * 
+	 * * Issue ì‚­ì œ
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/list.jsp È£Ãâ
+	 *
+	 * @return project/issue/list.jsp í˜¸ì¶œ
 	 */
 
 	@RequestMapping(value = "/remove", method = RequestMethod.GET)
 	public String remove(String check[], IssueVO vo, Model model, HttpSession session,
-			RedirectAttributes redirectAttributes) throws Exception {
+						 RedirectAttributes redirectAttributes) throws Exception {
 		if (check != null) {
-			// Àü´Ş¹ŞÀº parameter °ª check(Ã¼Å©µÈ projid°ª)¸¦ °¡Áö°í delete(id=remove)±¸¹® ½ÇÇà
+			// ì „ë‹¬ë°›ì€ parameter ê°’ check(ì²´í¬ëœ projidê°’)ë¥¼ ê°€ì§€ê³  delete(id=remove)êµ¬ë¬¸ ì‹¤í–‰
 			for (int i = 0; i < check.length; i++) {
 				vo.setSeq(Integer.parseInt(check[i].substring(0, check[i].indexOf("^"))));
 				vo.setProjid(Integer.parseInt(check[i].substring(check[i].indexOf("^") + 1, check[i].length())));
@@ -192,23 +187,23 @@ public class IssueController {
 				service.issue_remove(vo);
 			}
 		} else {
-			redirectAttributes.addFlashAttribute("resultmsg", "¼±ÅÃµÈ Note°¡ ¾ø½À´Ï´Ù");
+			redirectAttributes.addFlashAttribute("resultmsg", "ì„ íƒëœ Noteê°€ ì—†ìŠµë‹ˆë‹¤");
 		}
 		return "redirect:/project/issue/list";
 	}
 
 	/*
-	 * Project List ÆË¾÷
-	 * 
+	 * Project List íŒì—…
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/project_list.jsp È£Ãâ
+	 *
+	 * @return project/issue/project_list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/project_list", method = RequestMethod.GET)
 	public void project_list(HttpSession session, ListCriteria lc, Model model) throws Exception {
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		char user_role = role.charAt(0);
 
@@ -217,7 +212,7 @@ public class IssueController {
 		model.addAttribute("list", proj_service.project_list(lc));
 		model.addAttribute("lc", lc);
 
-		// ÆäÀÌÂ¡Ã³¸®
+		// í˜ì´ì§•ì²˜ë¦¬
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(lc);
 		pageMaker.setTotalCount(proj_service.project_listCount(lc));
@@ -226,17 +221,17 @@ public class IssueController {
 	}
 
 	/*
-	 * Phase List ÆË¾÷
-	 * 
+	 * Phase List íŒì—…
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/phase_list.jsp È£Ãâ
+	 *
+	 * @return project/issue/phase_list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/phase_list", method = RequestMethod.GET)
 	public void phaselist(ListCriteria lc, Model model, HttpSession session) throws Exception {
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		char user_role = role.charAt(0);
 		lc.setUser(id);
@@ -244,7 +239,7 @@ public class IssueController {
 		model.addAttribute("list", ph_service.phase_list(lc));
 		model.addAttribute("lc", lc);
 
-		// ÆäÀÌÂ¡Ã³¸®
+		// í˜ì´ì§•ì²˜ë¦¬
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(lc);
 		pageMaker.setTotalCount(ph_service.phase_listCount(lc));
@@ -252,17 +247,17 @@ public class IssueController {
 	}
 
 	/*
-	 * Case List ÆË¾÷
-	 * 
+	 * Case List íŒì—…
+	 *
 	 * @param model
-	 * 
-	 * @return project/issue/case_list.jsp È£Ãâ
+	 *
+	 * @return project/issue/case_list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/case_list", method = RequestMethod.GET)
 	public void caselist(ListCriteria lc, Model model, HttpSession session) throws Exception {
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		char user_role = role.charAt(0);
 		lc.setUser(id);
@@ -270,7 +265,7 @@ public class IssueController {
 		model.addAttribute("list", case_service.getReport(lc));
 		model.addAttribute("lc", lc);
 
-		// ÆäÀÌÂ¡Ã³¸®
+		// í˜ì´ì§•ì²˜ë¦¬
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(lc);
 		pageMaker.setTotalCount(case_service.case_listCount(lc));

@@ -3,12 +3,12 @@ package kr.co.comes.projectA.dto;
 import java.sql.Date;
 
 public class ReportVO {
-	
-	//°¢ ¾ÆÀÌµğ°ª
+
+	//ê° ì•„ì´ë””ê°’
 	int projid;
 	int senid;
-	
-	//¸®Æ÷Æ® ÃÖ »ó´Ü Å×ÀÌºí
+
+	//ë¦¬í¬íŠ¸ ìµœ ìƒë‹¨ í…Œì´ë¸”
 	String projname;
 	int phcount;
 	int secount;
@@ -18,16 +18,16 @@ public class ReportVO {
 	Date fromdate;
 	Date todate;
 	String name;
-	
-	//Å×½ºÆ® »ó¼¼ ÇÁ·ÎÁ§Æ®
+
+	//í…ŒìŠ¤íŠ¸ ìƒì„¸ í”„ë¡œì íŠ¸
 	/*String projabbr;
 	String projdesc;
 	String projuser;*/
 	String user;
 	String abbr;
 	String desc;
-	
-	//Å×½ºÆ® »ó¼¼ ÄÉÀÌ½º
+
+	//í…ŒìŠ¤íŠ¸ ìƒì„¸ ì¼€ì´ìŠ¤
 	String senaname;
 	String senaabbr;
 	String senadesc;
@@ -35,14 +35,14 @@ public class ReportVO {
 	int recount;
 	int repcount;
 	int refcount;
-	
-	//Å×½ºÆ® ±¸°£
+
+	//í…ŒìŠ¤íŠ¸ êµ¬ê°„
 	String devname;
 	String appname;
 	String result;
 	String resname;
-	
-	//Å×½ºÆ® ¼º°ø
+
+	//í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	Date starttime;
 	Date endtime;
 	String cpu_min;
@@ -53,8 +53,8 @@ public class ReportVO {
 	String battery_max;
 	String network_min;
 	String network_max;
-	
-	//Å×½ºÆ® ½ÇÆĞ
+
+	//í…ŒìŠ¤íŠ¸ ì‹¤íŒ¨
 	String seriousness;
 	String reason;
 	String procedure;

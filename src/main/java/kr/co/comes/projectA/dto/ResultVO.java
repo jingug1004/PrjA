@@ -11,35 +11,34 @@ public class ResultVO {
 	private int phid;
 	private String ph_name;
 	private String ph_abbr;
-	private int senid; // ½Ã³ª¸®¿À ¾ÆÀÌµğ
-	private String s_name; // ½Ã³ª¸®¿À ÀÌ¸§
+	private int senid; // ì‹œë‚˜ë¦¬ì˜¤ ì•„ì´ë””
+	private String s_name; // ì‹œë‚˜ë¦¬ì˜¤ ì´ë¦„
 	private String s_abbr;
 	private String c_category;
-	private int resid; // °á°ú¼ø¹ø
+	private int resid; // ê²°ê³¼ìˆœë²ˆ
 	private String resname;
 	private Integer devid;
-	private String dev_name; // µğ¹ÙÀÌ½º ÀÌ¸§
+	private String dev_name; // ë””ë°”ì´ìŠ¤ ì´ë¦„
 	private Integer appid;
-	private String app_name; // ¾Û ÀÌ¸§
-	private int repeat;// Å×½ºÆ® ¹İº¹ È½¼ö
-	private String starttime; 
-	private String endtime; // ¸ğ´ÏÅÍ Á¾·á½Ã°£
-	private int interval; // ¸ğ´ÏÅÍ ÁÖ±â
-	private String result; // Case ¼öÇà °á°ú 0:Pass, 1:Fail, 2:N/A, 3:N/I
-	private String reason; // ½ÇÆĞ»çÀ¯
-	private String seriousness; // ½É°¢µµ 0:Critical, 1:Major, 2:Minor
-	private String procedure; // ÀçÇö ÀıÂ÷
-	private String status; // »óÅÂ 0:New, 1:Open, 2:Assigned, 3:Resolved,
-							// 4:Closed, 5:Reopened
-	private String attach; // Ã·ºÎ ÆÄÀÏ ÆĞ½º
-	private String systemlog; // ½Ã½ºÅÛ ·Î±×
-	private String eventlog; // ÀÌº¥Æ® ·Î±×
-	private String etclog; // ±âÅ¸ ·Î±×
-	private Date adddate; // µî·ÏÀÏÀÚ
-	private Time addtime; // µî·Ï½Ã°£
-	private String adduser; // µî·ÏÇÑ »ç¿ëÀÚ
+	private String app_name; // ì•± ì´ë¦„
+	private int repeat;// í…ŒìŠ¤íŠ¸ ë°˜ë³µ íšŸìˆ˜
+	private String starttime;
+	private String endtime; // ëª¨ë‹ˆí„° ì¢…ë£Œì‹œê°„
+	private int interval; // ëª¨ë‹ˆí„° ì£¼ê¸°
+	private String result; // Case ìˆ˜í–‰ ê²°ê³¼ 0:Pass, 1:Fail, 2:N/A, 3:N/I
+	private String reason; // ì‹¤íŒ¨ì‚¬ìœ 
+	private String seriousness; // ì‹¬ê°ë„ 0:Critical, 1:Major, 2:Minor
+	private String procedure; // ì¬í˜„ ì ˆì°¨
+	private String status; // ìƒíƒœ 0:New, 1:Open, 2:Assigned, 3:Resolved,
+	// 4:Closed, 5:Reopened
+	private String attach; // ì²¨ë¶€ íŒŒì¼ íŒ¨ìŠ¤
+	private String systemlog; // ì‹œìŠ¤í…œ ë¡œê·¸
+	private String eventlog; // ì´ë²¤íŠ¸ ë¡œê·¸
+	private String etclog; // ê¸°íƒ€ ë¡œê·¸
+	private Date adddate; // ë“±ë¡ì¼ì
+	private Time addtime; // ë“±ë¡ì‹œê°„
+	private String adduser; // ë“±ë¡í•œ ì‚¬ìš©ì
 
-	
 	public Integer getDevid() {
 		return devid;
 	}

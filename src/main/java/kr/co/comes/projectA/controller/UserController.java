@@ -52,36 +52,36 @@ public class UserController {
 	private SqlSession session;
 	/**
 	 * @param model
-	 * @return user/login_check.jsp È£Ãâ
+	 * @return user/login_check.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/login_check")
 	public String logincheck(Model model, @ModelAttribute LoginVO login, BindingResult result,
-			HttpServletResponse response, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+							 HttpServletResponse response, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// mins edit : login validate
 		String resultmsg = "";
 		/*LicenseDecoder.initData(request);
 		if(!LicenseDecoder.getSerial().equals(LicenseDecoder.getMacAdrress()) || LicenseDecoder.getTerm() > 0) {
-			// ¶óÀÌ¼¾½ºÀÇ µ¥ÀÌÅÍ¿Í ´Ù¸§
-			resultmsg = "trial ¹öÀüÀÌ Á¾·áµÇ¾ú½À´Ï´Ù¶óÀÌ¼¾½º¸¦ ±¸¸ÅÇØÁÖ½Ê½Ã¿À.";
+			// ë¼ì´ì„¼ìŠ¤ì˜ ë°ì´í„°ì™€ ë‹¤ë¦„
+			resultmsg = "trial ë²„ì „ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤ë¼ì´ì„¼ìŠ¤ë¥¼ êµ¬ë§¤í•´ì£¼ì‹­ì‹œì˜¤.";
 			redirectAttributes.addFlashAttribute("resultmsg", resultmsg);
 			return "redirect:/";
 		}*/
 		new InputValidator().validate(login, result, "login");
 		if (result.hasErrors()) {
-			
+
 			for (int i = 0; i < result.getGlobalErrors().size(); i++) {
 				resultmsg += result.getGlobalErrors().get(i).getCode();
 			}
 			redirectAttributes.addFlashAttribute("resultmsg", resultmsg);
 			return "redirect:/";
 		}
-		
+
 		return "user/login_check";
 	}
 
 	/**
 	 * @param model
-	 * @return user/index.jsp È£Ãâ
+	 * @return user/index.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
@@ -90,7 +90,7 @@ public class UserController {
 
 	/**
 	 * @param model
-	 * @return user/regist.jsp È£Ãâ
+	 * @return user/regist.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/regist")
 	public String regist(Model model) {
@@ -100,29 +100,29 @@ public class UserController {
 
 	/**
 	 * @param vo
-	 * @return redirectÀ» ÅëÇØ¼­ regist_insert°¡ ½ÇÇà µÈ ÈÄ user/list·Î ´Ù½Ã ÀÌµ¿ÇÏµµ·Ï ÇÑ´Ù.
-	 * ¾Ï/º¹È£È­·Î ÀÎÇÑ ExceptionÃß°¡
-	 * @throws GeneralSecurityException 
-	 * @throws UnsupportedEncodingException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws EncoderException 
+	 * @return redirectì„ í†µí•´ì„œ regist_insertê°€ ì‹¤í–‰ ëœ í›„ user/listë¡œ ë‹¤ì‹œ ì´ë™í•˜ë„ë¡ í•œë‹¤.
+	 * ì•”/ë³µí˜¸í™”ë¡œ ì¸í•œ Exceptionì¶”ê°€
+	 * @throws GeneralSecurityException
+	 * @throws UnsupportedEncodingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws EncoderException
 	 */
 	@RequestMapping(value = "/regist_insert")
 	public String regist_insert(Model model,UserVO vo, BindingResult result,HttpServletRequest request, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException, EncoderException {
 
 		LicenseDecoder.initData(request);
-		
+
 		String name = "kr.co.comes.projectA.userMapper";
 		String maxuser = LicenseDecoder.getMaxuser();
-		
-		// cuser -> DB¿¡ ÀúÀåµÈ userÀÇ °³¼ö
+
+		// cuser -> DBì— ì €ì¥ëœ userì˜ ê°œìˆ˜
 		System.out.println(session.selectOne(name + ".listCount"));
 		int cuser = session.selectOne(name + ".listCount");
-		// user -> ¶óÀÌ¼±½ºÆÄÀÏ¿¡ ÀÖ´Â maxuserÀÇ ¼ö
+		// user -> ë¼ì´ì„ ìŠ¤íŒŒì¼ì— ìˆëŠ” maxuserì˜ ìˆ˜
 		int user = Integer.parseInt(maxuser);
 		String userid = vo.getId();
 
-		//DB¿¡ ÀúÀåµÈ userÀÇ ¼ö¿Í ¶óÀÌ¼±½º¿¡ ÀúÀåµÈ maxuserÀÇ °ªÀ» ºñ±³ÇØ¼­ ¶óÀÌ¼±½ºÀÇ ÀúÀåµÈ °ªº¸´Ù ¸¹À¸¸é È¸¿ø°¡ÀÔÀÌ ºÒ°¡´ÉÇÑ ·ÎÁ÷
+		//DBì— ì €ì¥ëœ userì˜ ìˆ˜ì™€ ë¼ì´ì„ ìŠ¤ì— ì €ì¥ëœ maxuserì˜ ê°’ì„ ë¹„êµí•´ì„œ ë¼ì´ì„ ìŠ¤ì˜ ì €ì¥ëœ ê°’ë³´ë‹¤ ë§ìœ¼ë©´ íšŒì›ê°€ì…ì´ ë¶ˆê°€ëŠ¥í•œ ë¡œì§
 		if(cuser < user){
 			new InputValidator().validate(vo, result, "user");
 			if (result.hasErrors()) {
@@ -134,40 +134,40 @@ public class UserController {
 				redirectAttributes.addFlashAttribute("resultmsg", resultmsg);
 				return "redirect:/user/regist";
 			}
-			//¾Ï/º¹È£È­¸¦ À§ÇÑ Å°°ª¼³Á¤
+			//ì•”/ë³µí˜¸í™”ë¥¼ ìœ„í•œ í‚¤ê°’ì„¤ì •
 			String key = "kr.co.comes.projecta";
 			AES256 a256 = new AES256(key);
 			URLCodec codec = new URLCodec();
-			
-			//¾ÏÈ£È­ Àü ÀÔ·ÂµÈ Á¤»óÀûÀÎ µ¥ÀÌÅÍ¸¦ °®°í¿À±â
+
+			//ì•”í˜¸í™” ì „ ì…ë ¥ëœ ì •ìƒì ì¸ ë°ì´í„°ë¥¼ ê°–ê³ ì˜¤ê¸°
 			String userpwd = vo.getPwd();
 			String username = vo.getName();
 			String usertelno = vo.getTelno();
 			String useremail = vo.getEmail();
 			String userrole = vo.getRole();
-			
-			//ºñ¹Ğ¹øÈ£, ÀÌ¸§, ÀüÈ­¹øÈ£, ÀÌ¸ŞÀÏÀ» ¾ÏÈ£È­Ã³¸®
+
+			//ë¹„ë°€ë²ˆí˜¸, ì´ë¦„, ì „í™”ë²ˆí˜¸, ì´ë©”ì¼ì„ ì•”í˜¸í™”ì²˜ë¦¬
 			String encpwd = codec.encode(a256.encrypt(""+userpwd));
 			String encname = codec.encode(a256.encrypt(username));
 			String enctelno = codec.encode(a256.encrypt(""+usertelno));
 			String encemail = codec.encode(a256.encrypt(""+useremail));
-			
-			//¾ÏÈ£È­µÈ ³»¿ëÀ» DB¿¡ ÀúÀåÇÏ±â À§ÇØ vo¿¡ ´ã±â
+
+			//ì•”í˜¸í™”ëœ ë‚´ìš©ì„ DBì— ì €ì¥í•˜ê¸° ìœ„í•´ voì— ë‹´ê¸°
 			vo.setId(userid);
 			vo.setPwd(encpwd);
 			vo.setName(encname);
 			vo.setTelno(enctelno);
 			vo.setEmail(encemail);
 			vo.setRole(userrole);
-			
-			//µ¥ÀÌÅÍ ÀúÀå
+
+			//ë°ì´í„° ì €ì¥
 			userservice.insertUser(vo);
 			redirectAttributes.addAttribute("id", userid);
 			System.out.println(userid);
 			return "redirect:/user/modify";
 		}else{
-			//maxuser·Î ÀÎÇÏ¿© È¸¿ø°¡ÀÔÀÌ ºÒ°¡´É ÇÒ¶§
-			redirectAttributes.addFlashAttribute("resultmsg","È¸¿ø°¡ÀÔÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù¶óÀÌ¼±½ºÀÇ maxuser¸¦ È®ÀÎÇØÁÖ¼¼¿ä");
+			//maxuserë¡œ ì¸í•˜ì—¬ íšŒì›ê°€ì…ì´ ë¶ˆê°€ëŠ¥ í• ë•Œ
+			redirectAttributes.addFlashAttribute("resultmsg","íšŒì›ê°€ì…ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤ë¼ì´ì„ ìŠ¤ì˜ maxuserë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”");
 			redirectAttributes.addAttribute("id", userid);
 			return "redirect:/user/regist";
 		}
@@ -175,61 +175,61 @@ public class UserController {
 
 	/**
 	 * @param model
-	 *            List<UserVO> list = userservice.userList(); userlist Äõ¸®·Î °¡Á®¿Â
-	 *            µ¥ÀÌÅÍ¸¦ ¸®½ºÆ® ÇüÅÂ·Î ³Ö°í model.addAttribute("list", list);
-	 *            addAttribute¸¦ ÅëÇØ¼­ list¶ó´Â °´Ã¼¸¦ "list"¸¦ µî·Ï
-	 * 
-	 * @return user/list.jsp È£Ãâ
+	 *            List<UserVO> list = userservice.userList(); userlist ì¿¼ë¦¬ë¡œ ê°€ì ¸ì˜¨
+	 *            ë°ì´í„°ë¥¼ ë¦¬ìŠ¤íŠ¸ í˜•íƒœë¡œ ë„£ê³  model.addAttribute("list", list);
+	 *            addAttributeë¥¼ í†µí•´ì„œ listë¼ëŠ” ê°ì²´ë¥¼ "list"ë¥¼ ë“±ë¡
+	 *
+	 * @return user/list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/list")
 	public void user_list(Model model, ListCriteria lc, HttpSession session) throws Exception {
 
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		char user_role = role.charAt(0);
 			/*
-			 * projectMapper.xml¿¡ ÀÖ´Â select(id=list)±¸¹® ½ÇÇà ÈÄ ProjectVOÅ¸ÀÔÀ¸·Î ÀúÀåµÈ Á¤º¸
-			 * ¸®½ºÆ®¸¦ list¶õ ÀÌ¸§À¸·Î list.jsp¿¡ Àü´Ş
+			 * projectMapper.xmlì— ìˆëŠ” select(id=list)êµ¬ë¬¸ ì‹¤í–‰ í›„ ProjectVOíƒ€ì…ìœ¼ë¡œ ì €ì¥ëœ ì •ë³´
+			 * ë¦¬ìŠ¤íŠ¸ë¥¼ listë€ ì´ë¦„ìœ¼ë¡œ list.jspì— ì „ë‹¬
 			 */
-			List<UserVO> list = userservice.userList(lc);
-			
-			System.out.println(list + " <--- listÃâ·Â");
-			
-			String key = "kr.co.comes.projecta";
-			AES256 a256 = new AES256(key);
-			URLCodec codec = new URLCodec();
-			
-			for(UserVO user : list){
-				String encname = user.getName();
-				String enctelno = user.getTelno();
-				String encemail = user.getEmail();
-				
-				String decname = a256.decrypt(codec.decode(encname));
-				String dectelno = a256.decrypt(codec.decode(enctelno));
-				String decemail = a256.decrypt(codec.decode(encemail));
-				
-				user.setName(decname);
-				user.setTelno(dectelno);
-				user.setEmail(decemail);	
-			}
-			
-			model.addAttribute("list", list);
+		List<UserVO> list = userservice.userList(lc);
 
-			lc.setUser(id);
-			lc.setUser_role(user_role);
+		System.out.println(list + " <--- listì¶œë ¥");
 
-			model.addAttribute("total", m_service.user_TotalCount(lc));
-			model.addAttribute("admin", m_service.user_AdminCount(lc));
-			model.addAttribute("testenginner", m_service.user_TestEnginnerCount(lc));
-			model.addAttribute("reviewer", m_service.user_ReviewerCount(lc));
+		String key = "kr.co.comes.projecta";
+		AES256 a256 = new AES256(key);
+		URLCodec codec = new URLCodec();
 
-			// ÆäÀÌÂ¡Ã³¸®
-			PageMaker pageMaker = new PageMaker();
-			pageMaker.setCri(lc);
-			pageMaker.setTotalCount(userservice.listCount(lc));
-			model.addAttribute("pageMaker", pageMaker);
+		for(UserVO user : list){
+			String encname = user.getName();
+			String enctelno = user.getTelno();
+			String encemail = user.getEmail();
+
+			String decname = a256.decrypt(codec.decode(encname));
+			String dectelno = a256.decrypt(codec.decode(enctelno));
+			String decemail = a256.decrypt(codec.decode(encemail));
+
+			user.setName(decname);
+			user.setTelno(dectelno);
+			user.setEmail(decemail);
+		}
+
+		model.addAttribute("list", list);
+
+		lc.setUser(id);
+		lc.setUser_role(user_role);
+
+		model.addAttribute("total", m_service.user_TotalCount(lc));
+		model.addAttribute("admin", m_service.user_AdminCount(lc));
+		model.addAttribute("testenginner", m_service.user_TestEnginnerCount(lc));
+		model.addAttribute("reviewer", m_service.user_ReviewerCount(lc));
+
+		// í˜ì´ì§•ì²˜ë¦¬
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(lc);
+		pageMaker.setTotalCount(userservice.listCount(lc));
+		model.addAttribute("pageMaker", pageMaker);
 	}
 
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
@@ -239,16 +239,16 @@ public class UserController {
 				userservice.deleteUser(id);
 			}
 		} else {
-			redirectAttributes.addFlashAttribute("resultmsg", "¼±ÅÃµÈ User°¡ ¾ø½À´Ï´Ù");
+			redirectAttributes.addFlashAttribute("resultmsg", "ì„ íƒëœ Userê°€ ì—†ìŠµë‹ˆë‹¤");
 		}
 		return "redirect:/user/list";
 	}
 
 	/**
 	 * @param id
-	 *            viewUserÄõ¸®¹®Àº whereÀ¸·Î Ã£À» id ¼±¾ğ
+	 *            viewUserì¿¼ë¦¬ë¬¸ì€ whereìœ¼ë¡œ ì°¾ì„ id ì„ ì–¸
 	 * @param model
-	 * @return user/change.jsp È£Ãâ
+	 * @return user/change.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/change")
 	public String userView(String id, Model model) {
@@ -259,16 +259,16 @@ public class UserController {
 
 	/**
 	 * @param vo
-	 *            ModelAttribute´Â º°µµÀÇ ¼³Á¤¾øÀÌ ºä¿¡ Àü´Ş updateUserÀ» ÅëÇØ¼­ °¢ ÄÃ·³¿¡ °ª ¼öÁ¤
-	 * @return user/changeÀ¸·Î ¸®´ÙÀÌ·ºÆ®
+	 *            ModelAttributeëŠ” ë³„ë„ì˜ ì„¤ì •ì—†ì´ ë·°ì— ì „ë‹¬ updateUserì„ í†µí•´ì„œ ê° ì»¬ëŸ¼ì— ê°’ ìˆ˜ì •
+	 * @return user/changeìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 	 */
 	@RequestMapping("/update")
 	public String userUpdate(@ModelAttribute UserVO vo, BindingResult result, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+							 RedirectAttributes redirectAttributes) {
 
 		session.setAttribute("name", vo.getName());
 
-		// input data Ã¼Å©
+		// input data ì²´í¬
 		new InputValidator().validate(vo, result, "user");
 		if (result.hasErrors()) {
 			String resultmsg = "";
@@ -286,50 +286,50 @@ public class UserController {
 
 	/**
 	 * @param vo
-	 *            ModelAttribute´Â º°µµÀÇ ¼³Á¤¾øÀÌ ºä¿¡ Àü´Ş updateUserÀ» ÅëÇØ¼­ °¢ ÄÃ·³¿¡ °ª ¼öÁ¤
-	 * @return user/listÀ¸·Î ¸®´ÙÀÌ·ºÆ®
-	 * @throws DecoderException 
-	 * @throws GeneralSecurityException 
-	 * @throws UnsupportedEncodingException 
-	 * @throws NoSuchAlgorithmException 
+	 *            ModelAttributeëŠ” ë³„ë„ì˜ ì„¤ì •ì—†ì´ ë·°ì— ì „ë‹¬ updateUserì„ í†µí•´ì„œ ê° ì»¬ëŸ¼ì— ê°’ ìˆ˜ì •
+	 * @return user/listìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+	 * @throws DecoderException
+	 * @throws GeneralSecurityException
+	 * @throws UnsupportedEncodingException
+	 * @throws NoSuchAlgorithmException
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public void modifyGET(Model model, String id) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException, DecoderException {
 		UserVO vo = userservice.userOne(id);
 		System.out.println(id);
 		System.out.println(vo);
-		
+
 		String key = "kr.co.comes.projecta";
 		AES256 a256 = new AES256(key);
 		URLCodec codec = new URLCodec();
-		
+
 		System.out.println(vo.getPwd());
 		String encpwd = vo.getPwd();
 		String encname = vo.getName();
 		String enctelno = vo.getTelno();
 		String encemail = vo.getEmail();
-		
+
 		String decpwd = a256.decrypt(codec.decode(encpwd));
 		String decname = a256.decrypt(codec.decode(encname));
 		String dectelno = a256.decrypt(codec.decode(enctelno));
 		String decemail = a256.decrypt(codec.decode(encemail));
-		
+
 		vo.setPwd(decpwd);
 		vo.setName(decname);
 		vo.setTelno(dectelno);
 		vo.setEmail(decemail);
-		
+
 		model.addAttribute("userVO", vo);
 	}
 
 	/**
 	 * @param vo
-	 *            ModelAttribute´Â º°µµÀÇ ¼³Á¤¾øÀÌ ºä¿¡ Àü´Ş updateUserÀ» ÅëÇØ¼­ °¢ ÄÃ·³¿¡ °ª ¼öÁ¤
-	 * @return user/listÀ¸·Î ¸®´ÙÀÌ·ºÆ®
-	 * @throws UnsupportedEncodingException 
-	 * @throws GeneralSecurityException 
-	 * @throws EncoderException 
-	 * @throws NoSuchAlgorithmException 
+	 *            ModelAttributeëŠ” ë³„ë„ì˜ ì„¤ì •ì—†ì´ ë·°ì— ì „ë‹¬ updateUserì„ í†µí•´ì„œ ê° ì»¬ëŸ¼ì— ê°’ ìˆ˜ì •
+	 * @return user/listìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+	 * @throws UnsupportedEncodingException
+	 * @throws GeneralSecurityException
+	 * @throws EncoderException
+	 * @throws NoSuchAlgorithmException
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modifyPOST(@ModelAttribute UserVO vo, BindingResult result, RedirectAttributes redirectAttributes) throws UnsupportedEncodingException, NoSuchAlgorithmException, EncoderException, GeneralSecurityException {
@@ -346,29 +346,29 @@ public class UserController {
 			String key = "kr.co.comes.projecta";
 			AES256 a256 = new AES256(key);
 			URLCodec codec = new URLCodec();
-			
+
 			String userid = vo.getId();
 			String userpwd = vo.getPwd();
 			String username = vo.getName();
 			String usertelno = vo.getTelno();
 			String useremail = vo.getEmail();
-			
+
 			String encpwd = codec.encode(a256.encrypt(""+userpwd));
 			String encname = codec.encode(a256.encrypt(username));
 			String enctelno = codec.encode(a256.encrypt(""+usertelno));
 			String encemail = codec.encode(a256.encrypt(""+useremail));
-			
+
 			System.out.println(encpwd);
 			System.out.println(encname);
 			System.out.println(enctelno);
 			System.out.println(encemail);
-			
+
 			vo.setId(userid);
 			vo.setPwd(encpwd);
 			vo.setName(encname);
 			vo.setTelno(enctelno);
 			vo.setEmail(encemail);
-			
+
 			userservice.updateUser(vo);
 		}
 		redirectAttributes.addAttribute("id", vo.getId());

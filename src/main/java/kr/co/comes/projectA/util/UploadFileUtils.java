@@ -27,7 +27,7 @@ public class UploadFileUtils {
 	private static final Logger logger = LoggerFactory.getLogger(UploadFileUtils.class);
 
 	/**
-	 * ÆÄÀÏ »èÁ¦
+	 * íŒŒì¼ ì‚­ì œ
 	 * @param fileName,uploadPath
 	 * @return ResponseEntity<String>
 	 */
@@ -39,21 +39,21 @@ public class UploadFileUtils {
 
 		MediaType mType = MediaUtils.getMediaType(formatName);
 
-		//¹Ìµğ¾î Å¸ÀÔÀÏ°æ¿ì ½æ³×ÀÏÀÌ¹ÌÁö »èÁ¦
+		//ë¯¸ë””ì–´ íƒ€ì…ì¼ê²½ìš° ì¸ë„¤ì¼ì´ë¯¸ì§€ ì‚­ì œ
 		if (mType != null) {
 
 			String front = fileName.substring(0, 12);
 			String end = fileName.substring(14);
-			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete(); 
+			new File(uploadPath + (front + end).replace('/', File.separatorChar)).delete();
 		}
 
-		//ÆÄÀÏ »èÁ¦
+		//íŒŒì¼ ì‚­ì œ
 		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
 
 	/**
-	 * ÆÄÀÏ ¾÷·Îµå
+	 * íŒŒì¼ ì—…ë¡œë“œ
 	 * @param fileName,uploadPath
 	 * @return String
 	 */
@@ -73,7 +73,7 @@ public class UploadFileUtils {
 
 		String formatName = originalName.substring(originalName.lastIndexOf(".") + 1);
 
-		//¹Ìµğ¾î Å¸ÀÔÀÏ °æ¿ì ½æ³×ÀÏ ÀÌ¹ÌÁö »ı¼º
+		//ë¯¸ë””ì–´ íƒ€ì…ì¼ ê²½ìš° ì¸ë„¤ì¼ ì´ë¯¸ì§€ ìƒì„±
 		if (MediaUtils.getMediaType(formatName) != null) {
 			uploadedFileName = makeThumbnail(uploadPath, savedPath, savedName);
 		} else {
@@ -85,7 +85,7 @@ public class UploadFileUtils {
 	}
 
 	/**
-	 * ½æ³×ÀÏ ÀÌ¹ÌÁö »ı¼º
+	 * ì¸ë„¤ì¼ ì´ë¯¸ì§€ ìƒì„±
 	 * @param fileName,path,uploadPath
 	 * @return String
 	 */
@@ -105,7 +105,7 @@ public class UploadFileUtils {
 	}
 
 	/**
-	 * ÀÌ¹ÌÁö ¾ÆÀÌÄÜ  »ı¼º
+	 * ì´ë¯¸ì§€ ì•„ì´ì½˜  ìƒì„±
 	 * @param fileName,path,uploadPath
 	 * @return String
 	 */
@@ -117,7 +117,7 @@ public class UploadFileUtils {
 	}
 
 	/**
-	 * ³¯Â¥º° µğ·ºÅä¸® »ı¼º
+	 * ë‚ ì§œë³„ ë””ë ‰í† ë¦¬ ìƒì„±
 	 * @param uploadPath
 	 * @return String
 	 */
@@ -139,9 +139,9 @@ public class UploadFileUtils {
 	}
 
 	/**
-	 * µğ·ºÅä¸® »ı¼º
+	 * ë””ë ‰í† ë¦¬ ìƒì„±
 	 * @param uploadPath,paths
-	 * @return 
+	 * @return
 	 */
 	private static void makeDir(String uploadPath, String... paths) {
 
@@ -160,7 +160,7 @@ public class UploadFileUtils {
 	}
 
 	/**
-	 * ÆÄÀÏ º¸±â, ÆÄÀÏ ´Ù¿î·Îµå
+	 * íŒŒì¼ ë³´ê¸°, íŒŒì¼ ë‹¤ìš´ë¡œë“œ
 	 * @param fileName,uploadPath
 	 * @return ResponseEntity<byte[]>
 	 */
@@ -180,10 +180,10 @@ public class UploadFileUtils {
 		/*	if (mType != null) {
 				headers.setContentType(mType);
 			} else {*/
-				fileName = fileName.substring(fileName.indexOf("_") + 1);
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-				headers.add("Content-Disposition",
-						"attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+			fileName = fileName.substring(fileName.indexOf("_") + 1);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.add("Content-Disposition",
+					"attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
 
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
 		} catch (Exception e) {

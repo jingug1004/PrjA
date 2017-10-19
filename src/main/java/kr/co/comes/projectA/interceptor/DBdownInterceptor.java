@@ -1,19 +1,18 @@
 package kr.co.comes.projectA.interceptor;
 
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 public class DBdownInterceptor extends HandlerInterceptorAdapter {
 
 	/**
-	 * Interceptor Ã³¸® ¸Þ¼Òµå DB´Ù¿î½Ã ÀÛ¿ë
-	 * @return /dbdown.jsp È£Ãâ
+	 * Interceptor ì²˜ë¦¬ ë©”ì†Œë“œ DBë‹¤ìš´ì‹œ ìž‘ìš©
+	 * @return /dbdown.jsp í˜¸ì¶œ
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

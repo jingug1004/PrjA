@@ -10,7 +10,7 @@ public class GoogleChartDTO {
 	private List<HashMap<String, Object>> cols;
 	private List<HashMap<String, Object>> rows;
 
-	// GooleChartDTO »ı¼ºÀÚ
+	// GooleChartDTO ìƒì„±ì
 	public GoogleChartDTO() {
 		this.result = new HashMap<String, Object>();
 		this.cols = new ArrayList<HashMap<String, Object>>();
@@ -20,7 +20,7 @@ public class GoogleChartDTO {
 		this.result.put("rows", this.rows);
 	}
 
-	// ÄÃ·³ Ãß°¡
+	// ï¿½Ã·ï¿½ ï¿½ß°ï¿½
 	public void addColumn(String label, String type) {
 		addColumn("", label, "", type);
 	}
@@ -47,7 +47,7 @@ public class GoogleChartDTO {
 		this.cols.add(col);
 	}
 
-	// row Ãß°¡
+	// ì»¬ëŸ¼ ì¶”ê°€
 	public void addRow(String name, Object value) {
 		addRow(name, value, null);
 	}
@@ -71,7 +71,7 @@ public class GoogleChartDTO {
 		this.rows.add(row);
 	}
 
-	// row»ı¼º
+	// rowìƒì„±
 	public void createRows(int count) {
 		HashMap<String, Object> row = null;
 		List<HashMap<String, Object>> cells = null;
@@ -83,7 +83,7 @@ public class GoogleChartDTO {
 		}
 	}
 
-	// cell »ı¼º
+	// cell ìƒì„±
 	public void addCell(int rowCount, Object value) {
 		addCell(rowCount, value, null);
 	}
@@ -100,7 +100,7 @@ public class GoogleChartDTO {
 		cells.add(cell);
 	}
 
-	// »ı¼ºµÈ °ª
+	// ìƒì„±ëœ ê°’
 	public HashMap<String, Object> getResult() {
 		return this.result;
 	}

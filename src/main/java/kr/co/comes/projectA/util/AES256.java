@@ -1,31 +1,30 @@
 package kr.co.comes.projectA.util;
 
+import org.apache.commons.codec.binary.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-
 /**
- * ¾ç¹æÇâ ÇÔÈ£È­ ¾Ë°í¸®ÁòÀÎ AES256 ¾ÏÈ£È­¸¦ Áö¿øÇÏ´Â Å¬·¡½º
+ * ì–‘ë°©í–¥ í•¨í˜¸í™” ì•Œê³ ë¦¬ì¦˜ì¸ AES256 ì•”í˜¸í™”ë¥¼ ì§€ì›í•˜ëŠ” í´ë˜ìŠ¤
  *
  */
 public class AES256 {
-	
+
 	private String iv;
 	private Key keySpec;
 
-	
+
 
 	/**
-	 * 16ÀÚ¸®ÀÇ Å°°ªÀ» ÀÔ·ÂÇÏ¿© °´Ã¼¸¦ »ı¼ºÇÑ´Ù.
-	 * @param key ¾Ï/º¹È£È­¸¦ À§ÇÑ Å°°ª
-	 * @throws UnsupportedEncodingException Å°°ªÀÇ ±æÀÌ°¡ 16ÀÌÇÏÀÏ °æ¿ì ¹ß»ı
+	 * 16ìë¦¬ì˜ í‚¤ê°’ì„ ì…ë ¥í•˜ì—¬ ê°ì²´ë¥¼ ìƒì„±í•œë‹¤.
+	 * @param key ì•”/ë³µí˜¸í™”ë¥¼ ìœ„í•œ í‚¤ê°’
+	 * @throws UnsupportedEncodingException í‚¤ê°’ì˜ ê¸¸ì´ê°€ 16ì´í•˜ì¼ ê²½ìš° ë°œìƒ
 	 */
 	public AES256(String key) throws UnsupportedEncodingException{
 		this.iv = key.substring(0,16);
@@ -37,13 +36,13 @@ public class AES256 {
 		}
 		System.arraycopy(b, 0, keyBytes, 0, len);
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
-		
+
 		this.keySpec = keySpec;
 	}
-	
+
 	/**
-	 * AES256À¸·Î ¾ÏÈ£È­ ÇÑ´Ù.
-	 * @param str ¾ÏÈ£È­ÇÒ ¹®ÀÚ¿­
+	 * AES256ìœ¼ë¡œ ì•”í˜¸í™” í•œë‹¤.
+	 * @param str ì•”í˜¸í™”í•  ë¬¸ìì—´
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws GeneralSecurityException
@@ -56,10 +55,10 @@ public class AES256 {
 		String enStr = new String(Base64.encodeBase64(encrypted));
 		return enStr;
 	}
-	
+
 	/**
-	 * AES256À¸·Î ¾ÏÈ£È­µÈ txt¸¦ º¹È£È­ÇÑ´Ù.
-	 * @param str º¹È£È­ÇÒ ¹®ÀÚ¿­
+	 * AES256ìœ¼ë¡œ ì•”í˜¸í™”ëœ txtë¥¼ ë³µí˜¸í™”í•œë‹¤.
+	 * @param str ë³µí˜¸í™”í•  ë¬¸ìì—´
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws GeneralSecurityException
@@ -71,5 +70,5 @@ public class AES256 {
 		byte[] byteStr = Base64.decodeBase64(str.getBytes());
 		return new String(c.doFinal(byteStr), "UTF-8");
 	}
-	
+
 }

@@ -4,25 +4,24 @@ import java.sql.Date;
 
 public class IssueVO {
 
-	
-	private int projid; // ÇÁ·ÎÁ§Æ® ¼ø¹ø
+	private int projid; // í”„ë¡œì íŠ¸ ìˆœë²ˆ
 	private String proj_name;
-	private int seq; // ÀÌ½´ ¼ø¹ø
-	private int phid; // Phase ¼ø¹ø
+	private int seq; // ì´ìŠˆ ìˆœë²ˆ
+	private int phid; // Phase ìˆœë²ˆ
 	private String ph_name;
-	private String isudesc; // ÀÌ½´ ¼³¸í
-	private Date adddate; // µî·ÏÀÏÀÚ
-	private Date upddate; // ¼öÁ¤ÀÏÀÚ
-	private String adduser; //µî·ÏÇÑ »ç¿ëÀÚ
-	private String upduser; //¼öÁ¤ÇÑ »ç¿ëÀÚ
-	private String isuname; // ÀÌ½´¸í
-	private String category; // ºĞ·ù 0:note, 1:issue, 2:defect
-	private String seriousness; // ½É°¢µµ 0:Critical, 1:Major, 2:Minor
-	private String procedure; //ÀçÇöÀıÂ÷
-	private String status; // »óÅÂ 0:New, 1:Open, 2:Assigned, 3:Resolved, 4:Closed, 5:Reopened
-	private String attach; //Ã·ºÎ ÆÄÀÏ ÆĞ½º
+	private String isudesc; // ì´ìŠˆ ì„¤ëª…
+	private Date adddate; // ë“±ë¡ì¼ì
+	private Date upddate; // ìˆ˜ì •ì¼ì
+	private String adduser; //ë“±ë¡í•œ ì‚¬ìš©ì
+	private String upduser; //ìˆ˜ì •í•œ ì‚¬ìš©ì
+	private String isuname; // ì´ìŠˆëª…
+	private String category; // ë¶„ë¥˜ 0:note, 1:issue, 2:defect
+	private String seriousness; // ì‹¬ê°ë„ 0:Critical, 1:Major, 2:Minor
+	private String procedure; //ì¬í˜„ì ˆì°¨
+	private String status; // ìƒíƒœ 0:New, 1:Open, 2:Assigned, 3:Resolved, 4:Closed, 5:Reopened
+	private String attach; //ì²¨ë¶€ íŒŒì¼ íŒ¨ìŠ¤
 	private String attachFullname;
-	
+
 	public String getProj_name() {
 		return proj_name;
 	}

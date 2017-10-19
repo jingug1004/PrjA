@@ -44,7 +44,7 @@ public class InputValidator implements Validator {
 		// } else if(m_type.equals("userchange")){
 		// UserVO vo = (UserVO)target;
 		// if(isemail(vo.getEmail())) {
-		// // email Çü½Ä true
+		// // email í˜•ì‹ true
 		// }
 		// } else {
 		//
@@ -115,59 +115,59 @@ public class InputValidator implements Validator {
 		}
 
 		switch (subkey) {
-		case "max":
-			if (plainValue.length() > Integer.valueOf(value)) {
-				result = (key + ":¹®ÀÚ¿­ ±æÀÌ ÃÖ´ë°ªÀº " + value + " ÀÔ´Ï´Ù");
-			}
-			break;
-		case "min":
-			if (plainValue.length() < Integer.valueOf(value)) {
-				result = (key + ":¹®ÀÚ¿­ ±æÀÌ ÃÖ¼Ò°ªÀº " + value + " ÀÔ´Ï´Ù");
-			}
-			break;
-		case "type":
-			switch (value) {
-			case "test":
-				if (plainValue.isEmpty()) {
-					result = "Å×½ºÆ®¸¦ ÁøÇàÇØÁÖ¼¼¿ä.";
+			case "max":
+				if (plainValue.length() > Integer.valueOf(value)) {
+					result = (key + ":ë¬¸ìì—´ ê¸¸ì´ ìµœëŒ€ê°’ì€ " + value + " ì…ë‹ˆë‹¤");
 				}
 				break;
-			case "email":
-				if (!plainValue.isEmpty()) {
-					if (!isemail(plainValue)) {
-						result = key + ":ÀÌ¸ŞÀÏ Çü½Ä¿¡ ¸ÂÁö¾Ê½À´Ï´Ù";
-					}
+			case "min":
+				if (plainValue.length() < Integer.valueOf(value)) {
+					result = (key + ":ë¬¸ìì—´ ê¸¸ì´ ìµœì†Œê°’ì€ " + value + " ì…ë‹ˆë‹¤");
 				}
 				break;
-			case "num":
-				if (!isnumber(plainValue)) {
-					result = key + ":¼ıÀÚ¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù";
+			case "type":
+				switch (value) {
+					case "test":
+						if (plainValue.isEmpty()) {
+							result = "í…ŒìŠ¤íŠ¸ë¥¼ ì§„í–‰í•´ì£¼ì„¸ìš”.";
+						}
+						break;
+					case "email":
+						if (!plainValue.isEmpty()) {
+							if (!isemail(plainValue)) {
+								result = key + ":ì´ë©”ì¼ í˜•ì‹ì— ë§ì§€ì•ŠìŠµë‹ˆë‹¤";
+							}
+						}
+						break;
+					case "num":
+						if (!isnumber(plainValue)) {
+							result = key + ":ìˆ«ìë§Œ ì…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤";
+						}
+						break;
+					case "password":
+						if (!ispassword(plainValue)) {
+							result = key + ":ë¹„ë°€ë²ˆí˜¸ í˜•ì‹ì— ë§ì§€ì•ŠìŠµë‹ˆë‹¤ë°˜ë“œì‹œ ì˜ì–´ ì†Œë¬¸ì, ëŒ€ë¬¸ì, ìˆ«ì, íŠ¹ìˆ˜ë¬¸ìê°€ ê° 1ìë¦¬ ì´ìƒ í¬í•¨ë˜ì–´ì•¼ í•©ë‹ˆë‹¤";
+						}
+						break;
+					case "notempty":
+						if (plainValue.isEmpty()) {
+							result = key + ":ì…ë ¥ë€ì´ ë¹„ì—ˆìŠµë‹ˆë‹¤";
+						}
+						break;
+					case "date":
+						if (!isdate(plainValue)) {
+							result = key + ":ë‚ ì§œ í˜•ì‹ì— ë§ì§€ì•ŠìŠµë‹ˆë‹¤";
+						}
+						break;
 				}
 				break;
-			case "password":
-				if (!ispassword(plainValue)) {
-					result = key + ":ºñ¹Ğ¹øÈ£ Çü½Ä¿¡ ¸ÂÁö¾Ê½À´Ï´Ù¹İµå½Ã ¿µ¾î ¼Ò¹®ÀÚ, ´ë¹®ÀÚ, ¼ıÀÚ, Æ¯¼ö¹®ÀÚ°¡ °¢ 1ÀÚ¸® ÀÌ»ó Æ÷ÇÔµÇ¾î¾ß ÇÕ´Ï´Ù";
+			case "user":
+				if (!isuser(plainValue)) {
+					result = key + ":ìœ ì € ë²ˆí˜¸ê°€ ì•„ë‹™ë‹ˆë‹¤";
 				}
 				break;
-			case "notempty":
-				if (plainValue.isEmpty()) {
-					result = key + ":ÀÔ·Â¶õÀÌ ºñ¾ú½À´Ï´Ù";
-				}
+			default:
 				break;
-			case "date":
-				if (!isdate(plainValue)) {
-					result = key + ":³¯Â¥ Çü½Ä¿¡ ¸ÂÁö¾Ê½À´Ï´Ù";
-				}
-				break;
-			}
-			break;
-		case "user":
-			if (!isuser(plainValue)) {
-				result = key + ":À¯Àú ¹øÈ£°¡ ¾Æ´Õ´Ï´Ù";
-			}
-			break;
-		default:
-			break;
 		}
 		if (!result.isEmpty()) {
 			errors.reject(result);

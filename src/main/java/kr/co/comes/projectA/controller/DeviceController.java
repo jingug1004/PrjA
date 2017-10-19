@@ -1,10 +1,10 @@
 package kr.co.comes.projectA.controller;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
+import kr.co.comes.projectA.dto.DeviceVO;
+import kr.co.comes.projectA.dto.ListCriteria;
+import kr.co.comes.projectA.dto.PageMaker;
+import kr.co.comes.projectA.service.DeviceService;
+import kr.co.comes.projectA.util.InputValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.comes.projectA.dto.DeviceVO;
-import kr.co.comes.projectA.dto.ListCriteria;
-import kr.co.comes.projectA.dto.PageMaker;
-import kr.co.comes.projectA.service.DeviceService;
-import kr.co.comes.projectA.util.InputValidator;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/device/*")
@@ -28,7 +26,7 @@ public class DeviceController {
 	/**
 	 * @param model
 	 * @param lc
-	 * @return project/device/devlist.jsp È£Ãâ
+	 * @return project/device/devlist.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/devlist")
@@ -40,7 +38,7 @@ public class DeviceController {
 
 	/**
 	 * @param model
-	 * @return project/device/getdevice.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/device/getdevice.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getdevice")
 	public String getdevice(Model model) {
@@ -49,7 +47,7 @@ public class DeviceController {
 
 	/**
 	 * @param model
-	 * @return project/device/getwc.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/device/getwc.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getwc")
 	public String getwc(Model model) {
@@ -58,7 +56,7 @@ public class DeviceController {
 
 	/**
 	 * @param model
-	 * @return project/device/getchk.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/device/getchk.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getchk")
 	public String getchk(Model model) {
@@ -67,7 +65,7 @@ public class DeviceController {
 
 	/**
 	 * @param model
-	 * @return project/device/getdnf.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/device/getdnf.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getdnf")
 	public String getdnf(Model model) {
@@ -77,7 +75,7 @@ public class DeviceController {
 	/**
 	 * @param model
 	 * @param lc
-	 * @return project/device/devpop.jsp È£Ãâ
+	 * @return project/device/devpop.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping("/devpop")
@@ -102,15 +100,15 @@ public class DeviceController {
 	 * @param vo
 	 * @param result
 	 * @param redirectAttributes
-	 * @return project/device/devmain.jsp È£Ãâ
+	 * @return project/device/devmain.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/devmain")
 	public String maindevice(Model model, ListCriteria lc, HttpSession session, @ModelAttribute DeviceVO vo,
-			BindingResult result, RedirectAttributes redirectAttributes) throws Exception {
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+							 BindingResult result, RedirectAttributes redirectAttributes) throws Exception {
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 
 		new InputValidator().validate(vo, result, "search");
@@ -125,8 +123,8 @@ public class DeviceController {
 
 		char user_role = role.charAt(0);
 		/*
-		 * ·Î±×ÀÎÇÑ »ç¿ëÀÚÀÇ ID(user)¿Í ±ÇÇÑ(user_role)ÀÌ ListCriteria¿¡ ÀúÀåµÇ¾îÀÖÀ» °æ¿ì¿¡¸¸ ÇÁ·ÎÁ§Æ® ¸ñ·ÏÀ»
-		 * ºÒ·¯¿È.
+		 * ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ID(user)ì™€ ê¶Œí•œ(user_role)ì´ ListCriteriaì— ì €ì¥ë˜ì–´ìˆì„ ê²½ìš°ì—ë§Œ í”„ë¡œì íŠ¸ ëª©ë¡ì„
+		 * ë¶ˆëŸ¬ì˜´.
 		 */
 		if (id != null && (role.equals("0"))) {
 
@@ -144,7 +142,7 @@ public class DeviceController {
 			lc.setUser(id);
 			lc.setUser_role(user_role);
 
-			// ÆäÀÌÂ¡Ã³¸®
+			// í˜ì´ì§•ì²˜ë¦¬
 			PageMaker pageMaker = new PageMaker();
 			pageMaker.setCri(lc);
 			pageMaker.setTotalCount(deviceservice.listCount(lc));
@@ -156,7 +154,7 @@ public class DeviceController {
 	/**
 	 * @param model
 	 * @param vo
-	 * @return project/device/devcontrol.jsp È£Ãâ
+	 * @return project/device/devcontrol.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/devcontrol")
@@ -169,7 +167,7 @@ public class DeviceController {
 	}
 
 	/**
-	 * @return project/device/deldevice.jsp È£Ãâ
+	 * @return project/device/deldevice.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/deldevice")
 	public String deviceDelete() {
@@ -177,7 +175,7 @@ public class DeviceController {
 	}
 
 	/**
-	 * @return project/device/devdefault.jsp È£Ãâ
+	 * @return project/device/devdefault.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/devdefault")
 	public String deviceDefult() {
@@ -185,7 +183,7 @@ public class DeviceController {
 	}
 
 	/**
-	 * @return project/device/devdefault1.jsp È£Ãâ
+	 * @return project/device/devdefault1.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/devdefault1")
 	public String deviceDefult1() {

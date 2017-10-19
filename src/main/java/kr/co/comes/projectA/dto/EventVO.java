@@ -4,28 +4,28 @@ import java.sql.Date;
 
 public class EventVO {
 
-	private int projid; //ÇÁ·ÎÁ§Æ® ¼ø¹ø
-	private int senid; //½Ã³ª¸®¿À id
-	private int seq; //ÀÌº¥Æ® ¼ø¹ø
-	private String evtdesc; //ÀÌº¥Æ® ¼³¸í
-	private String evtact; //¼öÇàÇÑ ¾×¼Ç
-	private String objid; //App È­¸é ¿ÀºêÁ§Æ® ID
+	private int projid; //í”„ë¡œì íŠ¸ ìˆœë²ˆ
+	private int senid; //ì‹œë‚˜ë¦¬ì˜¤ id
+	private int seq; //ì´ë²¤íŠ¸ ìˆœë²ˆ
+	private String evtdesc; //ì´ë²¤íŠ¸ ì„¤ëª…
+	private String evtact; //ìˆ˜í–‰í•œ ì•¡ì…˜
+	private String objid; //App í™”ë©´ ì˜¤ë¸Œì íŠ¸ ID
 	private String xy;
-	private int location_x1; //xÁÂÇ¥
+	private int location_x1; //xì¢Œí‘œ
 	private int location_x2;
 	private int location_x3;
-	private int location_y1; //yÁÂÇ¥
+	private int location_y1; //yì¢Œí‘œ
 	private int location_y2;
 	private int location_y3;
-	private String image; //ÀÌº¥Æ® Ä¸ÃÄ ÆÄÀÏ À§Ä¡
-	private Date adddate; //µî·ÏÀÏÀÚ
-	private String adduser; //µî·ÏÀ¯Àú
-	private String param; //scenario_auto¿¡¼­ Àü´Ş¹ŞÀº param°ª 
+	private String image; //ì´ë²¤íŠ¸ ìº¡ì³ íŒŒì¼ ìœ„ì¹˜
+	private Date adddate; //ë“±ë¡ì¼ì
+	private String adduser; //ë“±ë¡ìœ ì €
+	private String param; //scenario_autoì—ì„œ ì „ë‹¬ë°›ì€ paramê°’
 	private String filename;
 	private Integer appid;
 	private Integer devid;
 	private String msg;
-	
+
 	public Integer getAppid() {
 		return appid;
 	}

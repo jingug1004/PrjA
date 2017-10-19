@@ -1,19 +1,19 @@
 package kr.co.comes.projectA.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	/**
-	 * Àü URL ÀúÀå
+	 * ì „ URL ì €ì¥
 	 */
 
 	private void saveDest(HttpServletRequest req) {
@@ -35,8 +35,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	/**
-	 * Interceptor Ã³¸® ¸Ş¼Òµå session °ª nullÀÏ °æ¿ì ÀÛ¿ë
-	 * @return /user/login.jsp È£Ãâ
+	 * Interceptor ì²˜ë¦¬ ë©”ì†Œë“œ session ê°’ nullì¼ ê²½ìš° ì‘ìš©
+	 * @return /user/login.jsp í˜¸ì¶œ
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

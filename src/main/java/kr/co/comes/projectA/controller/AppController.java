@@ -1,10 +1,10 @@
 package kr.co.comes.projectA.controller;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
+import kr.co.comes.projectA.dto.AppVO;
+import kr.co.comes.projectA.dto.ListCriteria;
+import kr.co.comes.projectA.dto.PageMaker;
+import kr.co.comes.projectA.service.AppService;
+import kr.co.comes.projectA.util.InputValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.comes.projectA.dto.AppVO;
-import kr.co.comes.projectA.dto.ListCriteria;
-import kr.co.comes.projectA.dto.PageMaker;
-import kr.co.comes.projectA.service.AppService;
-import kr.co.comes.projectA.util.InputValidator;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/app/*")
@@ -24,11 +22,11 @@ public class AppController {
 
 	@Inject
 	AppService appservice;
-	
+
 	/**
 	 * @param model
 	 * @param lc
-	 * @return project/app/applist.jsp È£Ãâ
+	 * @return project/app/applist.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/applist")
@@ -37,38 +35,38 @@ public class AppController {
 		model.addAttribute("list", list);
 		return "app/applist";
 	}
-	
+
 	/**
 	 * @param model
-	 * @return project/app/delapp.jsp È£Ãâ
+	 * @return project/app/delapp.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/delapp")
 	public String appDelete(Model model) {
 		return "app/delapp";
 	}
 
-	
+
 	/**
 	 * @param model
-	 * @return project/app/getapp.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/app/getapp.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getapp")
 	public String getapp(Model model) {
 		return "app/getapp";
 	}
-	
+
 	/**
 	 * @param model
-	 * @return project/app/getpackage.jsp È£Ãâ(jar¿¬°á jsp)
+	 * @return project/app/getpackage.jsp í˜¸ì¶œ(jarì—°ê²° jsp)
 	 */
 	@RequestMapping(value = "/getpackage")
 	public String getpackage(Model model) {
 		return "app/getpackage";
 	}
-	
+
 	/**
 	 * @param model
-	 * @return project/app/appdefault.jsp È£Ãâ
+	 * @return project/app/appdefault.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/appdefault")
 	public String appdefault(Model model) {
@@ -76,17 +74,17 @@ public class AppController {
 	}
 	/**
 	 * @param model
-	 * @return project/app/appdefault1.jsp È£Ãâ
+	 * @return project/app/appdefault1.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/appdefault1")
 	public String appdefault1(Model model) {
 		return "app/appdefault1";
 	}
-	
+
 	/**
 	 * @param model
 	 * @param lc
-	 * @return project/app/apppop.jsp È£Ãâ
+	 * @return project/app/apppop.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping("/apppop")
@@ -102,7 +100,7 @@ public class AppController {
 		model.addAttribute("pageMaker", pageMaker);
 		return "app/apppop";
 	}
-	
+
 	/**
 	 * @param model
 	 * @param lc
@@ -110,15 +108,15 @@ public class AppController {
 	 * @param vo
 	 * @param result
 	 * @param redirectAttributes
-	 * @return project/app/appmain.jsp È£Ãâ
+	 * @return project/app/appmain.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/appmain")
 	public String mainapp(Model model, ListCriteria lc, HttpSession session,@ModelAttribute AppVO vo, BindingResult result,
-			RedirectAttributes redirectAttributes) throws Exception {
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ¾ÆÀÌµğ
+						  RedirectAttributes redirectAttributes) throws Exception {
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ì•„ì´ë””
 		String id = (String) session.getAttribute("id");
-		// ·Î±×ÀÎÇÑ È¸¿øÀÇ ±ÇÇÑ
+		// ë¡œê·¸ì¸í•œ íšŒì›ì˜ ê¶Œí•œ
 		String role = (String) session.getAttribute("role");
 		new InputValidator().validate(vo, result, "search");
 		if (result.hasErrors()) {
@@ -129,29 +127,29 @@ public class AppController {
 
 			redirectAttributes.addFlashAttribute("resultmsg", resultmsg);
 		}
-		
+
 		char user_role = role.charAt(0);
 		/*
-		 * ·Î±×ÀÎÇÑ »ç¿ëÀÚÀÇ ID(user)¿Í ±ÇÇÑ(user_role)ÀÌ ListCriteria¿¡ ÀúÀåµÇ¾îÀÖÀ» °æ¿ì¿¡¸¸ ÇÁ·ÎÁ§Æ® ¸ñ·ÏÀ»
-		 * ºÒ·¯¿È.
+		 * ë¡œê·¸ì¸í•œ ì‚¬ìš©ìì˜ ID(user)ì™€ ê¶Œí•œ(user_role)ì´ ListCriteriaì— ì €ì¥ë˜ì–´ìˆì„ ê²½ìš°ì—ë§Œ í”„ë¡œì íŠ¸ ëª©ë¡ì„
+		 * ë¶ˆëŸ¬ì˜´.
 		 */
 		if (id != null && (role.equals("0"))) {
-		lc.setUser(id);
-		List<AppVO> list = appservice.appList(lc);
-		model.addAttribute("list", list);
-		vo.setAdduser(id);
-		model.addAttribute("count", appservice.countApp(vo));
-		model.addAttribute("lc", lc);
-		
-		/*lc.setUser(id);*/
-		lc.setUser_role(user_role);
+			lc.setUser(id);
+			List<AppVO> list = appservice.appList(lc);
+			model.addAttribute("list", list);
+			vo.setAdduser(id);
+			model.addAttribute("count", appservice.countApp(vo));
+			model.addAttribute("lc", lc);
 
-		// ÆäÀÌÂ¡Ã³¸®
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(lc);
-		pageMaker.setTotalCount(appservice.listCount(lc));
-		model.addAttribute("pageMaker", pageMaker);
-		
+		/*lc.setUser(id);*/
+			lc.setUser_role(user_role);
+
+			// í˜ì´ì§•ì²˜ë¦¬
+			PageMaker pageMaker = new PageMaker();
+			pageMaker.setCri(lc);
+			pageMaker.setTotalCount(appservice.listCount(lc));
+			model.addAttribute("pageMaker", pageMaker);
+
 		}
 		return "app/appmain";
 	}

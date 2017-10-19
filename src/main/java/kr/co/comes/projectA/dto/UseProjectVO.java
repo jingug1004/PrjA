@@ -4,12 +4,12 @@ import java.sql.Date;
 
 public class UseProjectVO {
 
-	private int projid; //ÇÁ·ÎÁ§Æ® ¼ø¹ø
-	private String userid; //µî·ÏÇÑ »ç¿ëÀÚ
-	private String role; //person~~~ : Ã¥ÀÓÀÚ 0  parti~~~ : Âü¿©ÀÚ 1
-	private Date adddate; //µî·Ï³¯Â¥
-	private String adduser; //¼öÁ¤³¯Â¥
-	
+	private int projid; //í”„ë¡œì íŠ¸ ìˆœë²ˆ
+	private String userid; //ë“±ë¡í•œ ì‚¬ìš©ì
+	private String role; //person~~~ : ì±…ì„ì 0  parti~~~ : ì°¸ì—¬ì 1
+	private Date adddate; //ë“±ë¡ë‚ ì§œ
+	private String adduser; //ìˆ˜ì •ë‚ ì§œ
+
 	public int getProjid() {
 		return projid;
 	}

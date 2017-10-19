@@ -1,18 +1,16 @@
 package kr.co.comes.projectA.controller;
 
-import java.io.File;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
+import kr.co.comes.projectA.service.LicenseService;
+import kr.co.comes.projectA.util.LicenseDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import kr.co.comes.projectA.service.LicenseService;
-import kr.co.comes.projectA.util.LicenseDecoder;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 @Controller
 @RequestMapping("/license/*")
@@ -20,30 +18,30 @@ public class LicenseController {
 
 	@Inject
 	LicenseService licenseservice;
-	
+
 	/**
-	 * LicenseDecoder.initData(request) : ¸Ş¸ğ¸®¿¡ ¶óÀÌ¼±½º ÆÄÀÏ¿¡ ÀúÀåµÈ °ªµéÀ» ºÒ·¯¿Â´Ù.
-	 * maxuser : ¶óÀÌ¼±½ºÀÇ ÀúÀåµÈ ÃÖ´ë À¯Àú¼ö
-	 * serial : ¶óÀÌ¼±½ºÀÇ ÀúÀåµÈ ¹°¸®MACÁÖ¼Ò
-	 * term : ¶óÀÌ¼±½ºÀÇ ³²Àº ÀÏÀÚ
+	 * LicenseDecoder.initData(request) : ë©”ëª¨ë¦¬ì— ë¼ì´ì„ ìŠ¤ íŒŒì¼ì— ì €ì¥ëœ ê°’ë“¤ì„ ë¶ˆëŸ¬ì˜¨ë‹¤.
+	 * maxuser : ë¼ì´ì„ ìŠ¤ì˜ ì €ì¥ëœ ìµœëŒ€ ìœ ì €ìˆ˜
+	 * serial : ë¼ì´ì„ ìŠ¤ì˜ ì €ì¥ëœ ë¬¼ë¦¬MACì£¼ì†Œ
+	 * term : ë¼ì´ì„ ìŠ¤ì˜ ë‚¨ì€ ì¼ì
 	 * @param model
-	 * @return project/license/list.jsp È£Ãâ
+	 * @return project/license/list.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping(value = "/list")
 	public String licenseList(Model model,HttpServletRequest request) {
 		LicenseDecoder.initData(request);
 		String commercial;
-		System.out.println("¸®½ºÆ® È®ÀÎ");
+		System.out.println("ë¦¬ìŠ¤íŠ¸ í™•ì¸");
 		String maxuser = LicenseDecoder.getMaxuser();
-		System.out.println(maxuser + "maxuser È®ÀÎ");
+		System.out.println(maxuser + "maxuser í™•ì¸");
 		String serial = LicenseDecoder.getSerial();
-		System.out.println(serial + "serial È®ÀÎ");
+		System.out.println(serial + "serial í™•ì¸");
 		int term = LicenseDecoder.getTerm();
-		System.out.println(term + "term È®ÀÎ");
+		System.out.println(term + "term í™•ì¸");
 		if(term < 1000){
-			commercial = "Ã¼Çè";
+			commercial = "ì²´í—˜";
 		}else{
-			commercial = "»ó¿ë";
+			commercial = "ìƒìš©";
 		}
 		model.addAttribute("term", term);
 		model.addAttribute("user", maxuser);
@@ -53,7 +51,7 @@ public class LicenseController {
 
 	/**
 	 * @param model
-	 * @return project/license/view.jsp È£Ãâ
+	 * @return project/license/view.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/view")
 	public String licenseView(Model model) {
@@ -62,41 +60,41 @@ public class LicenseController {
 
 	/**
 	 * @param model
-	 * @return project/license/regist.jsp È£Ãâ
+	 * @return project/license/regist.jsp í˜¸ì¶œ
 	 */
 	@RequestMapping("/regist")
 	public String licenseRegist(Model model) {
 		return "license/regist";
 	}
-	
+
 	/**
-	 * @param file -> regist¿¡¼­ ¼±ÅÃµÈ ÆÄÀÏÀÇ Á¤º¸
+	 * @param file -> registì—ì„œ ì„ íƒëœ íŒŒì¼ì˜ ì •ë³´
 	 * @param req
 	 * @param model
-	 * @return project/license/regist_upload.jsp È£Ãâ
+	 * @return project/license/regist_upload.jsp í˜¸ì¶œ
 	 * @throws Exception
 	 */
 	@RequestMapping("/regist_upload")
 	public String readLicense(@RequestParam("upload") MultipartFile file, HttpServletRequest req, Model model) throws Exception {
-		
+
 		String ipaddr = req.getRemoteAddr().toString();
 		SocketHandler socket = new SocketHandler();
-		String pmes = "¶óÀÌ¼±½º µî·Ï¿¡ ¼º°øÇß½À´Ï´Ù.";
-		String fmes = "¶óÀÌ¼±½º µî·Ï¿¡ ½ÇÆĞÇß½À´Ï´Ù.";
-		
+		String pmes = "ë¼ì´ì„ ìŠ¤ ë“±ë¡ì— ì„±ê³µí–ˆìŠµë‹ˆë‹¤.";
+		String fmes = "ë¼ì´ì„ ìŠ¤ ë“±ë¡ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.";
+
 		try{
-			//¼­¹öÀÇ °æ·Î¿¡ ÆÄÀÏ ÀúÀå·ÎÁ÷
+			//ì„œë²„ì˜ ê²½ë¡œì— íŒŒì¼ ì €ì¥ë¡œì§
 			File f = new File("/home/comes/license/" + file.getOriginalFilename());
-			file.transferTo(f);		
-			
+			file.transferTo(f);
+
 			LicenseDecoder.initData(req);
-			
+
 			socket.doMessage(ipaddr, pmes);
-		
-			}catch(Exception e){
-				e.printStackTrace();
-				socket.doMessage(ipaddr, fmes);
-			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+			socket.doMessage(ipaddr, fmes);
+		}
 		return "redirect:/license/list";
 	}
 

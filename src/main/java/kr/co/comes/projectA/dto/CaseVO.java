@@ -4,31 +4,30 @@ import java.sql.Date;
 
 public class CaseVO {
 
-	private int projid; //ÇÁ·ÎÁ§Æ® ¼ø¹ø
-	private String proj_name; //ÇÁ·ÎÁ§Æ® ¸í
-	private String proj_abbr; //ÇÁ·ÎÁ§Æ® ¸í
-	private int senid; //½Ã³ª¸®¿À id
-	private int phid; //phase ¼ø¹ø
-	private String ph_name; //Phase ¸í
-	private String ph_abbr; //Phase ¸í
-	private String senaabbr; //½Ã³ª¸®¿À ¾à¾î
-	private String senaname; //½Ã³ª¸®¿À  ÀÌ¸§
-	private String senadesc; //½Ã³ª¸®¿À ¼³¸í
-	private Integer devid; // ±âº» µğ¹ÙÀÌ½º ¼ø¹ø
-	private String dev_name; // µğ¹ÙÀÌ½º ÀÌ¸§
-	private Integer appid; //App ¼ø¹ø
+	private int projid; //í”„ë¡œì íŠ¸ ìˆœë²ˆ
+	private String proj_name; //í”„ë¡œì íŠ¸ ëª…
+	private String proj_abbr; //í”„ë¡œì íŠ¸ ëª…
+	private int senid; //ì‹œë‚˜ë¦¬ì˜¤ id
+	private int phid; //phase ìˆœë²ˆ
+	private String ph_name; //Phase ëª…
+	private String ph_abbr; //Phase ëª…
+	private String senaabbr; //ì‹œë‚˜ë¦¬ì˜¤ ì•½ì–´
+	private String senaname; //ì‹œë‚˜ë¦¬ì˜¤  ì´ë¦„
+	private String senadesc; //ì‹œë‚˜ë¦¬ì˜¤ ì„¤ëª…
+	private Integer devid; // ê¸°ë³¸ ë””ë°”ì´ìŠ¤ ìˆœë²ˆ
+	private String dev_name; // ë””ë°”ì´ìŠ¤ ì´ë¦„
+	private Integer appid; //App ìˆœë²ˆ
 	private String app_name; //App name
-	private int result; //°á°ú °¹¼ö
-	private Date adddate; //µî·Ï³¯Â¥
-	private Date upddate; //¼öÁ¤³¯Â¥
-	private String user; //µî·ÏÇÑ »ç¿ëÀÚ
-	private String upduser; //¼öÁ¤ÇÑ »ç¿ëÀÚ
-	private String expect; //¿¹»ó °á°ú
-	private String attach; //Ã·ºÎ ÆÄÀÏ ÆĞ½º
-	private String s_category; // ºĞ·ù 0:¸Å´º¾ó Å×½ºÆ®, 1:¸®¼Ò½º ¸ğ´ÏÅÍ¸µ, 2:Å×½ºÆ® ÀÚµ¿È­
-	
-	
-	
+	private int result; //ê²°ê³¼ ê°¯ìˆ˜
+	private Date adddate; //ë“±ë¡ë‚ ì§œ
+	private Date upddate; //ìˆ˜ì •ë‚ ì§œ
+	private String user; //ë“±ë¡í•œ ì‚¬ìš©ì
+	private String upduser; //ìˆ˜ì •í•œ ì‚¬ìš©ì
+	private String expect; //ì˜ˆìƒ ê²°ê³¼
+	private String attach; //ì²¨ë¶€ íŒŒì¼ íŒ¨ìŠ¤
+	private String s_category; // ë¶„ë¥˜ 0:ë§¤ë‰´ì–¼ í…ŒìŠ¤íŠ¸, 1:ë¦¬ì†ŒìŠ¤ ëª¨ë‹ˆí„°ë§, 2:í…ŒìŠ¤íŠ¸ ìë™í™”
+
+
 	public String getProj_name() {
 		return proj_name;
 	}
@@ -161,19 +160,19 @@ public class CaseVO {
 	public void setPh_abbr(String ph_abbr) {
 		this.ph_abbr = ph_abbr;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "[{\"Project Title\":\"" + proj_name + "\"}" + 
-				", {\"Phase Title\":\"" + ph_name + "\"" +"}" + 
-				", {\"Test Case Title\":\"" + senaname + "\"" +"}" + 
-				", {\"Test Case abbr\":\"" + senaabbr + "\"" +"}" + 
-				", {\"Test Case Description\":\"" + senadesc + "\"" +"}" + 
-				", {\"Expected Result\":\"" + expect + "\"" +"}" + 
-				", {\"App\":\"" + app_name + "\"" +"}" + 
-				", {\"Device\":\"" + dev_name + "\"" +"}" + 
+		return "[{\"Project Title\":\"" + proj_name + "\"}" +
+				", {\"Phase Title\":\"" + ph_name + "\"" +"}" +
+				", {\"Test Case Title\":\"" + senaname + "\"" +"}" +
+				", {\"Test Case abbr\":\"" + senaabbr + "\"" +"}" +
+				", {\"Test Case Description\":\"" + senadesc + "\"" +"}" +
+				", {\"Expected Result\":\"" + expect + "\"" +"}" +
+				", {\"App\":\"" + app_name + "\"" +"}" +
+				", {\"Device\":\"" + dev_name + "\"" +"}" +
 				"]";
 	}
-	
+
 
 }

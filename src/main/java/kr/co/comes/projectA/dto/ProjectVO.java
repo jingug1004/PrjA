@@ -4,23 +4,23 @@ import java.sql.Date;
 
 public class ProjectVO {
 
-	private int projid; //ÇÁ·ÎÁ§Æ® ¼ø¹ø
-	private String abbr; //¾à¾î
-	private String name; //ÇÁ·ÎÁ§Æ® ÀÌ¸§
-	private String desc; //ÇÁ·ÎÁ§Æ® ¼³¸í
-	private String user; //µî·ÏÇÑ »ç¿ëÀÚ
-	private Date adddate; //µî·Ï³¯Â¥
-	private Date upddate; //¼öÁ¤³¯Â¥
-	private String upduser; //¼öÁ¤ÇÑ »ç¿ëÀÚ
+	private int projid; //í”„ë¡œì íŠ¸ ìˆœë²ˆ
+	private String abbr; //ì•½ì–´
+	private String name; //í”„ë¡œì íŠ¸ ì´ë¦„
+	private String desc; //í”„ë¡œì íŠ¸ ì„¤ëª…
+	private String user; //ë“±ë¡í•œ ì‚¬ìš©ì
+	private Date adddate; //ë“±ë¡ë‚ ì§œ
+	private Date upddate; //ìˆ˜ì •ë‚ ì§œ
+	private String upduser; //ìˆ˜ì •í•œ ì‚¬ìš©ì
 	private String status; //0:Ongoing 1:Hold 2:End
-	private Date fromdate; //ÇÁ·ÎÁ§Æ® ½ÃÀÛÀÏ
-	private Date todate; //ÇÁ·ÎÁ§Æ® Á¾·áÀÏ
-	private String phase; //´Ü°è
-	private int phid; //´Ü°è ¼ø¹ø
-	private int case1; //ÄÉÀÌ½º °¹¼ö
-	private int issue; //ÀÌ½´ °¹¼ö
+	private Date fromdate; //í”„ë¡œì íŠ¸ ì‹œì‘ì¼
+	private Date todate; //í”„ë¡œì íŠ¸ ì¢…ë£Œì¼
+	private String phase; //ë‹¨ê³„
+	private int phid; //ë‹¨ê³„ ìˆœë²ˆ
+	private int case1; //ì¼€ì´ìŠ¤ ê°¯ìˆ˜
+	private int issue; //ì´ìŠˆ ê°¯ìˆ˜
 	private String attach;
-	
+
 	
 	public int getProjid() {
 		return projid;

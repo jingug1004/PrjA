@@ -82,20 +82,20 @@ public class LicenseDecoder {
 
 	public static int compareAtoB(String date) {
 		Date da;
-	      int compare = 0;
-	      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-	      Date currentDate = new Date();
-	      formatter.setLenient(false);
-	      
-	      try {
-	         da = formatter.parse(date.toString());
-	         long diff = da.getTime() - currentDate.getTime();
-	         compare = (int)(diff/(24*60*60*1000));
+		int compare = 0;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+		Date currentDate = new Date();
+		formatter.setLenient(false);
+
+		try {
+			da = formatter.parse(date.toString());
+			long diff = da.getTime() - currentDate.getTime();
+			compare = (int)(diff/(24*60*60*1000));
 //	         compare = currentDate.compareTo(da);
-	      } catch (ParseException e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      }
-	      return compare;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return compare;
 	}
 }

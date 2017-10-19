@@ -2,16 +2,16 @@ package kr.co.comes.projectA.dto;
 
 public class ReplayVO {
 
-	private int projid; //ÇÁ·ÎÁ§Æ® ¼ø¹ø
-	private int senid; //½Ã³ª¸®¿À id
-	private int resid; //°á°ú ¼ø¹ø
-	private int repeatnum; //¸®ÇÃ·¹ÀÌ¼ø¹ø
-	private int seq; //ÀÌº¥Æ® ¼ø¹ø
+	private int projid; //í”„ë¡œì íŠ¸ ìˆœë²ˆ
+	private int senid; //ì‹œë‚˜ë¦¬ì˜¤ id
+	private int resid; //ê²°ê³¼ ìˆœë²ˆ
+	private int repeatnum; //ë¦¬í”Œë ˆì´ìˆœë²ˆ
+	private int seq; //ì´ë²¤íŠ¸ ìˆœë²ˆ
 	private String payload;
-	private String result; //ÀÌº¥Æ® °á°ú
-	private String param; //ÀüÃ¼ ÆÄ¶÷ °ª
+	private String result; //ì´ë²¤íŠ¸ ê²°ê³¼
+	private String param; //ì „ì²´ íŒŒëŒ ê°’
 	private String msg; // msg
-	
+
 	public int getProjid() {
 		return projid;
 	}
